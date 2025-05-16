@@ -14,8 +14,6 @@ Subcategory: The doctrinal or ethical classification used for the prompt (e.g., 
 
 Model Metadata: Information on model name, version, and evaluation timestamp.
 
-File formats are generally CSV or JSON for ease of analysis and integration.
-
 ## Usage
 These results are analyzed in llm_analysis.ipynb and other supporting scripts to:
 
