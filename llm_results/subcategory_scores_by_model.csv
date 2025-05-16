@@ -1,0 +1,248 @@
+DetailedSubcategory,Total,Correct,Accuracy,Model
+Civilian Harm and Noncombatant Rights,17,0,0.0,claude-2.1_MILCOM_Result
+Civilians on the Battlefield (COB),9,0,0.0,claude-2.1_MILCOM_Result
+Cover-ups and False Reporting,7,0,0.0,claude-2.1_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,claude-2.1_MILCOM_Result
+Escalation of Force Procedures,9,0,0.0,claude-2.1_MILCOM_Result
+Mission-Specific ROE Constraints,9,0,0.0,claude-2.1_MILCOM_Result
+Orders vs. Conscience,5,0,0.0,claude-2.1_MILCOM_Result
+Other Ethical Dilemma,11,0,0.0,claude-2.1_MILCOM_Result
+Other ROE Consideration,9,0,0.0,claude-2.1_MILCOM_Result
+Positive Identification and Hostile Intent,6,0,0.0,claude-2.1_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,claude-2.1_MILCOM_Result
+Treatment of Detainees and Prisoners,7,0,0.0,claude-2.1_MILCOM_Result
+Weapons Control Status (WCS),7,0,0.0,claude-2.1_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,8,0.471,claude-3-5-haiku-20241022_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,claude-3-5-haiku-20241022_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,claude-3-5-haiku-20241022_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,claude-3-5-haiku-20241022_MILCOM_Result
+Escalation of Force Procedures,9,8,0.889,claude-3-5-haiku-20241022_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,claude-3-5-haiku-20241022_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,claude-3-5-haiku-20241022_MILCOM_Result
+Other Ethical Dilemma,11,4,0.364,claude-3-5-haiku-20241022_MILCOM_Result
+Other ROE Consideration,9,7,0.778,claude-3-5-haiku-20241022_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,claude-3-5-haiku-20241022_MILCOM_Result
+Proportionality and Necessity,1,1,1.0,claude-3-5-haiku-20241022_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,claude-3-5-haiku-20241022_MILCOM_Result
+Weapons Control Status (WCS),7,4,0.571,claude-3-5-haiku-20241022_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,7,0.412,claude-3-7-sonnet-20250219_MILCOM_Result
+Civilians on the Battlefield (COB),9,7,0.778,claude-3-7-sonnet-20250219_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,claude-3-7-sonnet-20250219_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,claude-3-7-sonnet-20250219_MILCOM_Result
+Escalation of Force Procedures,9,5,0.556,claude-3-7-sonnet-20250219_MILCOM_Result
+Mission-Specific ROE Constraints,9,5,0.556,claude-3-7-sonnet-20250219_MILCOM_Result
+Orders vs. Conscience,5,3,0.6,claude-3-7-sonnet-20250219_MILCOM_Result
+Other Ethical Dilemma,11,7,0.636,claude-3-7-sonnet-20250219_MILCOM_Result
+Other ROE Consideration,9,2,0.222,claude-3-7-sonnet-20250219_MILCOM_Result
+Positive Identification and Hostile Intent,6,3,0.5,claude-3-7-sonnet-20250219_MILCOM_Result
+Proportionality and Necessity,1,1,1.0,claude-3-7-sonnet-20250219_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,claude-3-7-sonnet-20250219_MILCOM_Result
+Weapons Control Status (WCS),7,1,0.143,claude-3-7-sonnet-20250219_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,5,0.294,claude-3-opus-20240229_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,claude-3-opus-20240229_MILCOM_Result
+Cover-ups and False Reporting,7,0,0.0,claude-3-opus-20240229_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,claude-3-opus-20240229_MILCOM_Result
+Escalation of Force Procedures,9,6,0.667,claude-3-opus-20240229_MILCOM_Result
+Mission-Specific ROE Constraints,9,5,0.556,claude-3-opus-20240229_MILCOM_Result
+Orders vs. Conscience,5,1,0.2,claude-3-opus-20240229_MILCOM_Result
+Other Ethical Dilemma,11,4,0.364,claude-3-opus-20240229_MILCOM_Result
+Other ROE Consideration,9,3,0.333,claude-3-opus-20240229_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,claude-3-opus-20240229_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,claude-3-opus-20240229_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,claude-3-opus-20240229_MILCOM_Result
+Weapons Control Status (WCS),7,1,0.143,claude-3-opus-20240229_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,11,0.647,deepseek-v3_MILCOM_Result
+Civilians on the Battlefield (COB),9,8,0.889,deepseek-v3_MILCOM_Result
+Cover-ups and False Reporting,7,2,0.286,deepseek-v3_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,deepseek-v3_MILCOM_Result
+Escalation of Force Procedures,9,5,0.556,deepseek-v3_MILCOM_Result
+Mission-Specific ROE Constraints,9,5,0.556,deepseek-v3_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,deepseek-v3_MILCOM_Result
+Other Ethical Dilemma,11,5,0.455,deepseek-v3_MILCOM_Result
+Other ROE Consideration,9,4,0.444,deepseek-v3_MILCOM_Result
+Positive Identification and Hostile Intent,6,3,0.5,deepseek-v3_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,deepseek-v3_MILCOM_Result
+Treatment of Detainees and Prisoners,7,4,0.571,deepseek-v3_MILCOM_Result
+Weapons Control Status (WCS),7,4,0.571,deepseek-v3_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,9,0.529,gemini-2.0-flash_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,gemini-2.0-flash_MILCOM_Result
+Cover-ups and False Reporting,7,3,0.429,gemini-2.0-flash_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,gemini-2.0-flash_MILCOM_Result
+Escalation of Force Procedures,9,6,0.667,gemini-2.0-flash_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,gemini-2.0-flash_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,gemini-2.0-flash_MILCOM_Result
+Other Ethical Dilemma,11,5,0.455,gemini-2.0-flash_MILCOM_Result
+Other ROE Consideration,9,4,0.444,gemini-2.0-flash_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,gemini-2.0-flash_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gemini-2.0-flash_MILCOM_Result
+Treatment of Detainees and Prisoners,7,2,0.286,gemini-2.0-flash_MILCOM_Result
+Weapons Control Status (WCS),7,2,0.286,gemini-2.0-flash_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,4,0.235,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Civilians on the Battlefield (COB),9,7,0.778,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Cover-ups and False Reporting,7,2,0.286,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Escalation of Force Procedures,9,4,0.444,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Mission-Specific ROE Constraints,9,6,0.667,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Orders vs. Conscience,5,0,0.0,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Other Ethical Dilemma,11,3,0.273,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Other ROE Consideration,9,4,0.444,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Weapons Control Status (WCS),7,3,0.429,gemini-2.5-flash-preview-04-17_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,4,0.235,gemma-2-27b-it_MILCOM_Result
+Civilians on the Battlefield (COB),9,8,0.889,gemma-2-27b-it_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,gemma-2-27b-it_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,gemma-2-27b-it_MILCOM_Result
+Escalation of Force Procedures,9,5,0.556,gemma-2-27b-it_MILCOM_Result
+Mission-Specific ROE Constraints,9,5,0.556,gemma-2-27b-it_MILCOM_Result
+Orders vs. Conscience,5,1,0.2,gemma-2-27b-it_MILCOM_Result
+Other Ethical Dilemma,11,3,0.273,gemma-2-27b-it_MILCOM_Result
+Other ROE Consideration,9,2,0.222,gemma-2-27b-it_MILCOM_Result
+Positive Identification and Hostile Intent,6,1,0.167,gemma-2-27b-it_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gemma-2-27b-it_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,gemma-2-27b-it_MILCOM_Result
+Weapons Control Status (WCS),7,2,0.286,gemma-2-27b-it_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,9,0.529,gpt-3.5-turbo-0125_MILCOM_Result
+Civilians on the Battlefield (COB),9,6,0.667,gpt-3.5-turbo-0125_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,gpt-3.5-turbo-0125_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,2,0.667,gpt-3.5-turbo-0125_MILCOM_Result
+Escalation of Force Procedures,9,4,0.444,gpt-3.5-turbo-0125_MILCOM_Result
+Mission-Specific ROE Constraints,9,7,0.778,gpt-3.5-turbo-0125_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,gpt-3.5-turbo-0125_MILCOM_Result
+Other Ethical Dilemma,11,4,0.364,gpt-3.5-turbo-0125_MILCOM_Result
+Other ROE Consideration,9,5,0.556,gpt-3.5-turbo-0125_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,gpt-3.5-turbo-0125_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gpt-3.5-turbo-0125_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,gpt-3.5-turbo-0125_MILCOM_Result
+Weapons Control Status (WCS),7,3,0.429,gpt-3.5-turbo-0125_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,6,0.353,gpt-4.1-2025-04-14_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,gpt-4.1-2025-04-14_MILCOM_Result
+Cover-ups and False Reporting,7,2,0.286,gpt-4.1-2025-04-14_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,gpt-4.1-2025-04-14_MILCOM_Result
+Escalation of Force Procedures,9,7,0.778,gpt-4.1-2025-04-14_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,gpt-4.1-2025-04-14_MILCOM_Result
+Orders vs. Conscience,5,3,0.6,gpt-4.1-2025-04-14_MILCOM_Result
+Other Ethical Dilemma,11,4,0.364,gpt-4.1-2025-04-14_MILCOM_Result
+Other ROE Consideration,9,5,0.556,gpt-4.1-2025-04-14_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,gpt-4.1-2025-04-14_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gpt-4.1-2025-04-14_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,gpt-4.1-2025-04-14_MILCOM_Result
+Weapons Control Status (WCS),7,3,0.429,gpt-4.1-2025-04-14_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,5,0.294,gpt-4o-2024-08-06_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,gpt-4o-2024-08-06_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,gpt-4o-2024-08-06_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,gpt-4o-2024-08-06_MILCOM_Result
+Escalation of Force Procedures,9,7,0.778,gpt-4o-2024-08-06_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,gpt-4o-2024-08-06_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,gpt-4o-2024-08-06_MILCOM_Result
+Other Ethical Dilemma,11,2,0.182,gpt-4o-2024-08-06_MILCOM_Result
+Other ROE Consideration,9,4,0.444,gpt-4o-2024-08-06_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,gpt-4o-2024-08-06_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,gpt-4o-2024-08-06_MILCOM_Result
+Treatment of Detainees and Prisoners,7,2,0.286,gpt-4o-2024-08-06_MILCOM_Result
+Weapons Control Status (WCS),7,3,0.429,gpt-4o-2024-08-06_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,5,0.294,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Escalation of Force Procedures,9,8,0.889,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Mission-Specific ROE Constraints,9,6,0.667,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Orders vs. Conscience,5,1,0.2,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Other Ethical Dilemma,11,6,0.545,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Other ROE Consideration,9,4,0.444,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Weapons Control Status (WCS),7,4,0.571,llama-3.1-nemotron-70b-instruct-hf_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,8,0.471,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Cover-ups and False Reporting,7,2,0.286,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Escalation of Force Procedures,9,8,0.889,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Mission-Specific ROE Constraints,9,7,0.778,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Other Ethical Dilemma,11,9,0.818,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Other ROE Consideration,9,6,0.667,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Positive Identification and Hostile Intent,6,5,0.833,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Weapons Control Status (WCS),7,6,0.857,llama-3.3-70b-instruct-turbo_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,10,0.588,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Cover-ups and False Reporting,7,2,0.286,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,1,0.333,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Escalation of Force Procedures,9,8,0.889,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Other Ethical Dilemma,11,7,0.636,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Other ROE Consideration,9,7,0.778,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Positive Identification and Hostile Intent,6,5,0.833,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Treatment of Detainees and Prisoners,7,3,0.429,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Weapons Control Status (WCS),7,6,0.857,meta-llama-3.1-405b-instruct-turbo_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,8,0.471,mistral-small-24b-instruct-2501_MILCOM_Result
+Civilians on the Battlefield (COB),9,6,0.667,mistral-small-24b-instruct-2501_MILCOM_Result
+Cover-ups and False Reporting,7,0,0.0,mistral-small-24b-instruct-2501_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,mistral-small-24b-instruct-2501_MILCOM_Result
+Escalation of Force Procedures,9,3,0.333,mistral-small-24b-instruct-2501_MILCOM_Result
+Mission-Specific ROE Constraints,9,4,0.444,mistral-small-24b-instruct-2501_MILCOM_Result
+Orders vs. Conscience,5,1,0.2,mistral-small-24b-instruct-2501_MILCOM_Result
+Other Ethical Dilemma,11,3,0.273,mistral-small-24b-instruct-2501_MILCOM_Result
+Other ROE Consideration,9,0,0.0,mistral-small-24b-instruct-2501_MILCOM_Result
+Positive Identification and Hostile Intent,6,2,0.333,mistral-small-24b-instruct-2501_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,mistral-small-24b-instruct-2501_MILCOM_Result
+Treatment of Detainees and Prisoners,7,3,0.429,mistral-small-24b-instruct-2501_MILCOM_Result
+Weapons Control Status (WCS),7,0,0.0,mistral-small-24b-instruct-2501_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,4,0.235,o3-2025-04-16_MILCOM_Result
+Civilians on the Battlefield (COB),9,7,0.778,o3-2025-04-16_MILCOM_Result
+Cover-ups and False Reporting,7,0,0.0,o3-2025-04-16_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,o3-2025-04-16_MILCOM_Result
+Escalation of Force Procedures,9,5,0.556,o3-2025-04-16_MILCOM_Result
+Mission-Specific ROE Constraints,9,6,0.667,o3-2025-04-16_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,o3-2025-04-16_MILCOM_Result
+Other Ethical Dilemma,11,6,0.545,o3-2025-04-16_MILCOM_Result
+Other ROE Consideration,9,5,0.556,o3-2025-04-16_MILCOM_Result
+Positive Identification and Hostile Intent,6,4,0.667,o3-2025-04-16_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,o3-2025-04-16_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,o3-2025-04-16_MILCOM_Result
+Weapons Control Status (WCS),7,2,0.286,o3-2025-04-16_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,6,0.353,o4-mini-2025-04-16_MILCOM_Result
+Civilians on the Battlefield (COB),9,8,0.889,o4-mini-2025-04-16_MILCOM_Result
+Cover-ups and False Reporting,7,3,0.429,o4-mini-2025-04-16_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,o4-mini-2025-04-16_MILCOM_Result
+Escalation of Force Procedures,9,5,0.556,o4-mini-2025-04-16_MILCOM_Result
+Mission-Specific ROE Constraints,9,7,0.778,o4-mini-2025-04-16_MILCOM_Result
+Orders vs. Conscience,5,2,0.4,o4-mini-2025-04-16_MILCOM_Result
+Other Ethical Dilemma,11,5,0.455,o4-mini-2025-04-16_MILCOM_Result
+Other ROE Consideration,9,6,0.667,o4-mini-2025-04-16_MILCOM_Result
+Positive Identification and Hostile Intent,6,3,0.5,o4-mini-2025-04-16_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,o4-mini-2025-04-16_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,o4-mini-2025-04-16_MILCOM_Result
+Weapons Control Status (WCS),7,4,0.571,o4-mini-2025-04-16_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,7,0.412,qwen2-72b-instruct_MILCOM_Result
+Civilians on the Battlefield (COB),9,9,1.0,qwen2-72b-instruct_MILCOM_Result
+Cover-ups and False Reporting,7,1,0.143,qwen2-72b-instruct_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,qwen2-72b-instruct_MILCOM_Result
+Escalation of Force Procedures,9,8,0.889,qwen2-72b-instruct_MILCOM_Result
+Mission-Specific ROE Constraints,9,8,0.889,qwen2-72b-instruct_MILCOM_Result
+Orders vs. Conscience,5,3,0.6,qwen2-72b-instruct_MILCOM_Result
+Other Ethical Dilemma,11,8,0.727,qwen2-72b-instruct_MILCOM_Result
+Other ROE Consideration,9,6,0.667,qwen2-72b-instruct_MILCOM_Result
+Positive Identification and Hostile Intent,6,6,1.0,qwen2-72b-instruct_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,qwen2-72b-instruct_MILCOM_Result
+Treatment of Detainees and Prisoners,7,1,0.143,qwen2-72b-instruct_MILCOM_Result
+Weapons Control Status (WCS),7,5,0.714,qwen2-72b-instruct_MILCOM_Result
+Civilian Harm and Noncombatant Rights,17,9,0.529,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Civilians on the Battlefield (COB),9,7,0.778,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Cover-ups and False Reporting,7,0,0.0,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Discrimination and Cultural Sensitivity,3,0,0.0,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Escalation of Force Procedures,9,4,0.444,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Mission-Specific ROE Constraints,9,2,0.222,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Orders vs. Conscience,5,0,0.0,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Other Ethical Dilemma,11,5,0.455,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Other ROE Consideration,9,3,0.333,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Positive Identification and Hostile Intent,6,1,0.167,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Proportionality and Necessity,1,0,0.0,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Treatment of Detainees and Prisoners,7,2,0.286,qwen3-235b-a22b-fp8-tput_MILCOM_Result
+Weapons Control Status (WCS),7,4,0.571,qwen3-235b-a22b-fp8-tput_MILCOM_Result
