@@ -4,7 +4,7 @@ This project benchmarks the performance of Large Language Models (LLMs) against 
 
 ## Overview
 
-Objective: Evaluate how effectively LLMs can interpret and respond to complex military scenarios by simulating decision-making processes that align with established doctrines and policies.([llm-strategist.github.io][1])
+Objective: Evaluate how effectively LLMs can interpret and respond to complex military scenarios by simulating decision-making processes that align with established doctrines and policies
 
 Approach: Utilize doctrine-grounded prompts to simulate real-world military decision-making situations.
 
