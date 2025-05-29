@@ -8,8 +8,8 @@ The objective is to evaluate how effectively LLMs can interpret and respond to c
 
 ## Repository Structure
 
-* **`llm_analysis.ipynb`**: A Jupyter Notebook containing the analysis and evaluation of LLM responses to various military scenarios.
-* **`llm_results/`**: Directory housing the results generated from LLM evaluations.([Confident AI][2])
+* llm_results/: Directory housing the results of LLM evaluations.
+* foundation_prompts/: Collection of prompts based on military doctrines used to test LLM responses.
 
 ## Getting Started
 
