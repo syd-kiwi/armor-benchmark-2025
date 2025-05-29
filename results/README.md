@@ -1,5 +1,5 @@
-# LLM Results
-This directory contains the output files from evaluating Large Language Models (LLMs) on military decision-making scenarios. These evaluations are part of the broader llm-decision-framework project, which investigates how well LLMs align with ethical and legal standards in high-stakes operational contexts.
+# Results
+This directory contains the output files from evaluating LLM preformance on military decision-making scenarios. These evaluations are part of the project, which investigates how well LLMs align with ethical and legal standards in high-stakes operational contexts.
 
 ## Contents
 Each file in this directory typically represents the evaluation results of one or more LLMs across specific prompts. Files may include:
