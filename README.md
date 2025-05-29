@@ -13,22 +13,14 @@ Evaluation: Analyze LLM responses for consistency, accuracy, and alignment with 
 ## Repository Structure
 
 * `llm_results/`: Directory housing the results of LLM evaluations.
+   * `model_outputs/`: Raw responses from various LLMs to the benchmark questions. Files are named to reflect the model used.
+   * `evaluation_scores.csv`: Contains scoring results for each model, measuring correctness and category-wise performance.
+   * `summary_heatmaps/`: Visualizations of model performance across doctrinal subcategories (e.g., accuracy heatmaps, confusion matrices).
+     
 * `foundation_prompts/`: Collection of prompts based on military doctrines used to test LLM responses.
-
-## Getting Started
-
-### Prerequisites
-* Python 3.8 or higher
-* Jupyter Notebook
-
-### Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/syd-kiwi/llm-decision-framework.git
-   cd llm-decision-framework
-   ```
+   * Contains CSV files with doctrinally grounded multiple-choice questions.
+   * These are grouped into subcategories: `ethics_questions.csv` based on ethical dilemmas from ADA590672 and `roe_questions.csv` based on rules of engagement from TBS B130936.
+   * Each row in these files includes the question, answer choices, and the correct answer label.
 
 ## Evaluation Metrics
 * Doctrine Alignment: Measures how well LLM responses align with established military doctrines.
