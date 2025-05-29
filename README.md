@@ -4,20 +4,22 @@ This project benchmarks the performance of Large Language Models (LLMs) against 
 
 ## Overview
 
-The objective is to evaluate how effectively LLMs can interpret and respond to complex military scenarios by simulating decision-making processes that align with established doctrines and policies.([llm-strategist.github.io][1])
+Objective: Evaluate how effectively LLMs can interpret and respond to complex military scenarios by simulating decision-making processes that align with established doctrines and policies.([llm-strategist.github.io][1])
+
+Approach: Utilize doctrine-grounded prompts to simulate real-world military decision-making situations.
+
+Evaluation: Analyze LLM responses for consistency, accuracy, and alignment with established military guidelines.
 
 ## Repository Structure
 
-* llm_results/: Directory housing the results of LLM evaluations.
-* foundation_prompts/: Collection of prompts based on military doctrines used to test LLM responses.
+* `llm_results/`: Directory housing the results of LLM evaluations.
+* `foundation_prompts/`: Collection of prompts based on military doctrines used to test LLM responses.
 
 ## Getting Started
 
 ### Prerequisites
-
 * Python 3.8 or higher
 * Jupyter Notebook
-* Required Python packages (as specified in the notebook)
 
 ### Installation
 
@@ -28,40 +30,10 @@ The objective is to evaluate how effectively LLMs can interpret and respond to c
    cd llm-decision-framework
    ```
 
-
-
-2. **Install necessary packages:**
-
-   It's recommended to use a virtual environment:
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-
-
-*Note: If `requirements.txt` is not provided, please install the packages as specified in `llm_analysis.ipynb`.*
-
-3. **Launch Jupyter Notebook:**
-
-   ```bash
-   jupyter notebook
-   ```
-
-
-
-Open `llm_analysis.ipynb` to explore the analysis.
-
-## Usage
-
-The `llm_analysis.ipynb` notebook guides you through the process of evaluating LLM responses to military decision-making scenarios. It includes:([llm-strategist.github.io][1])
-
-* Loading and preprocessing of scenario data
-* Generation of prompts aligned with military doctrines
-* Interaction with selected LLMs
-* Analysis of LLM responses against expected outcomes
+## Evaluation Metrics
+* Doctrine Alignment: Measures how well LLM responses align with established military doctrines.
+* Decision Accuracy: Assesses the correctness of decisions made by LLMs in simulated scenarios.
+* Response Consistency: Evaluates the consistency of LLM outputs across similar scenarios.
 
 ## Contributing
 
