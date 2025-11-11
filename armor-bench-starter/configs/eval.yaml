@@ -1,0 +1,4 @@
+metrics:
+  accuracy: true
+  paraphrase_consistency: false
+  refusal_rate: true

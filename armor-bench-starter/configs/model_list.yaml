@@ -1,0 +1,13 @@
+models:
+- enabled: false
+  kind: chat
+  name: gpt-4-placeholder
+  provider: openai
+- enabled: false
+  kind: chat
+  name: claude-3.7-placeholder
+  provider: anthropic
+- enabled: false
+  kind: text
+  name: llama-3.1-8b-instruct
+  provider: hf-local
