@@ -12,6 +12,25 @@ This repository is a **ready-to-extend scaffold** for building a doctrinally gro
 7. `evaluate_llms` → pose MCQs to models; compute Accuracy + Refusal Rate.
 8. `generate_report` → produce LaTeX tables/plots in `outputs/reports`.
 
+### Generate MCQs directly from CSV with hosted LLMs
+If you already have doctrine snippets grouped by category in a CSV, you can skip the
+bert-based span extraction and create MCQs with OpenAI + Gemini (and a pluggable third model):
+
+```bash
+export OPENAI_API_KEY="sk-..."
+export GEMINI_API_KEY="..."
+
+python scripts/generate_mcqs_multi_llm.py \
+  --input_csv doctrine_snippets.csv \
+  --output_questions questions_generated_multi_llm.jsonl \
+  --models gpt gemini \
+  --questions_per_model 12
+```
+
+The CSV must have columns `Document,Category,Text`. Questions are written as JSONL, one
+question per line, with a `span_id` and `generator_model` field so you can trace
+provenance across different LLMs.
+
 ## Quickstart
 ```bash
 pip install -r requirements.txt
