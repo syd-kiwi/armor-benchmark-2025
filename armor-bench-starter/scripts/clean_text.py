@@ -5,8 +5,8 @@ import re
 # Resolve path to project root (scripts folder → parent)
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-INPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories_raw.csv"
-OUTPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories.csv"
+INPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories_raw_v2.csv"
+OUTPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories_v2.csv"
 
 def clean_text(text):
     if pd.isna(text):
