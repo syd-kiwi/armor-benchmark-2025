@@ -382,13 +382,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_csv",
         type=str,
-        default="doctrine_categories.csv",
+        default="doctrine_categories_v2.csv",
         help="Path to CSV file with columns Document,Category,Text.",
     )
     parser.add_argument(
         "--output_questions",
         type=str,
-        default="questions_generated_multi_llm.jsonl",
+        default="questions_generated_multi_llm_v2.jsonl",
         help="Path to JSONL file where MCQs will be written.",
     )
     parser.add_argument(
