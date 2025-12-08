@@ -382,7 +382,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--input_csv",
         type=str,
-        default="doctrine_categories_v2.csv",
+        default="doctrine_categories_v3.csv",
         help="Path to CSV file with columns Document,Category,Text.",
     )
     parser.add_argument(
