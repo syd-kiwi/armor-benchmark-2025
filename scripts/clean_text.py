@@ -31,7 +31,7 @@ def clean_text(text):
     return s
 
 def main():
-    df = pd.read_csv(INPUT_FILE)
+    df = pd.read_csv(INPUT_FILE, encoding='utf-8', encoding_errors='replace')
 
     for col in df.columns:
         df[col] = df[col].apply(clean_text)
