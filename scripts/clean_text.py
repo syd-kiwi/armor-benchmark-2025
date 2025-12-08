@@ -3,7 +3,7 @@ import pandas as pd
 import re
 
 # Resolve path to project root (scripts folder → parent)
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent
 
 INPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories_raw_v3.csv"
 OUTPUT_FILE = PROJECT_ROOT / "docs" / "doctrine_categories_v3.csv"
