@@ -388,7 +388,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--output_questions",
         type=str,
-        default="questions_generated_multi_llm_v2.jsonl",
+        default="questions_generated_multi_llm_v3.jsonl",
         help="Path to JSONL file where MCQs will be written.",
     )
     parser.add_argument(
