@@ -1,0 +1,61 @@
+Category,Total,Correct,Accuracy,Model
+Ethical Dilemmas,120,114,0.95,AceReason-Nemotron-14B_result
+Rules of Engagement,140,133,0.95,AceReason-Nemotron-14B_result
+Ethical Dilemmas,120,116,0.967,arcee-blitz_result
+Rules of Engagement,140,136,0.971,arcee-blitz_result
+Ethical Dilemmas,120,98,0.817,bitnet-b1.58-2B-4T_result
+Rules of Engagement,140,112,0.8,bitnet-b1.58-2B-4T_result
+Ethical Dilemmas,120,25,0.208,claude-2.1_result
+Rules of Engagement,140,16,0.114,claude-2.1_result
+Ethical Dilemmas,120,118,0.983,claude-3-5-haiku-20241022_result
+Rules of Engagement,140,134,0.957,claude-3-5-haiku-20241022_result
+Ethical Dilemmas,120,119,0.992,claude-3-7-sonnet-20250219_result
+Rules of Engagement,140,140,1.0,claude-3-7-sonnet-20250219_result
+Ethical Dilemmas,120,118,0.983,claude-3-opus-20240229_result
+Rules of Engagement,140,134,0.957,claude-3-opus-20240229_result
+Ethical Dilemmas,120,119,0.992,coolqwen-3b-it_result
+Rules of Engagement,140,132,0.943,coolqwen-3b-it_result
+Ethical Dilemmas,120,115,0.958,deepseek-r1-distill-qwen-14b_result
+Rules of Engagement,140,135,0.964,deepseek-r1-distill-qwen-14b_result
+Ethical Dilemmas,120,119,0.992,deepseek-v3_result
+Rules of Engagement,140,137,0.979,deepseek-v3_result
+Ethical Dilemmas,120,118,0.983,Falcon-H1-7B-Instruct_result
+Rules of Engagement,140,140,1.0,Falcon-H1-7B-Instruct_result
+Ethical Dilemmas,120,119,0.992,gemini-2.0-flash_result
+Rules of Engagement,140,139,0.993,gemini-2.0-flash_result
+Ethical Dilemmas,120,119,0.992,gemini-2.5-flash-preview-04-17_result
+Rules of Engagement,140,139,0.993,gemini-2.5-flash-preview-04-17_result
+Ethical Dilemmas,120,118,0.983,gemma-2-9b-it_result
+Rules of Engagement,140,135,0.964,gemma-2-9b-it_result
+Ethical Dilemmas,120,119,0.992,gpt-3.5-turbo-0125_result
+Rules of Engagement,140,137,0.979,gpt-3.5-turbo-0125_result
+Ethical Dilemmas,120,120,1.0,gpt-4.1-mini-2025-04-14_result
+Rules of Engagement,140,138,0.986,gpt-4.1-mini-2025-04-14_result
+Ethical Dilemmas,120,119,0.992,gpt-4o-2024-08-06_result
+Rules of Engagement,140,140,1.0,gpt-4o-2024-08-06_result
+Ethical Dilemmas,120,80,0.667,Llama-2-7b-chat-hf_result
+Rules of Engagement,140,28,0.2,Llama-2-7b-chat-hf_result
+Ethical Dilemmas,120,118,0.983,Llama-3.1-8B-Instruct_result
+Rules of Engagement,140,136,0.971,Llama-3.1-8B-Instruct_result
+Ethical Dilemmas,120,116,0.967,Llama-3.2-3B-Instruct_result
+Rules of Engagement,140,118,0.843,Llama-3.2-3B-Instruct_result
+Ethical Dilemmas,120,97,0.808,marin-8b-instruct_result
+Rules of Engagement,140,114,0.814,marin-8b-instruct_result
+Ethical Dilemmas,120,116,0.967,Mistral-7B-Instruct-v0.3_result
+Rules of Engagement,140,131,0.936,Mistral-7B-Instruct-v0.3_result
+Ethical Dilemmas,120,116,0.967,nous-hermes-2-mixtral-8x7b-dpo_result
+Rules of Engagement,140,136,0.971,nous-hermes-2-mixtral-8x7b-dpo_result
+Ethical Dilemmas,120,119,0.992,o4-mini-2025-04-16_result
+Rules of Engagement,140,137,0.979,o4-mini-2025-04-16_result
+Ethical Dilemmas,120,119,0.992,Phi-4-mini-instruct_result
+Rules of Engagement,140,134,0.957,Phi-4-mini-instruct_result
+Ethical Dilemmas,120,117,0.975,Qwen2.5-7B-Instruct_result
+Rules of Engagement,140,137,0.979,Qwen2.5-7B-Instruct_result
+Ethical Dilemmas,120,117,0.975,Qwen3-8B_result
+Rules of Engagement,140,137,0.979,Qwen3-8B_result
+Ethical Dilemmas,120,117,0.975,scb10x-llama3-1-typhoon2-8b-instruct_result
+Rules of Engagement,140,130,0.929,scb10x-llama3-1-typhoon2-8b-instruct_result
+Ethical Dilemmas,120,101,0.842,SmolLM2-1.7B-Instruct_result
+Rules of Engagement,140,90,0.643,SmolLM2-1.7B-Instruct_result
+Ethical Dilemmas,120,117,0.975,Virtuoso-Lite_result
+Rules of Engagement,140,134,0.957,Virtuoso-Lite_result
