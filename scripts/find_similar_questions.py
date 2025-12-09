@@ -149,20 +149,66 @@ def write_pairs_csv(path: str, pairs: List[Tuple[int, int, float]], questions: L
 
     print(f"\n[✔] Done. Written to {path}\n")
 
+def dedupe_questions_from_pairs(
+    pairs: List[Tuple[int, int, float]],
+    questions: List[Dict[str, Any]],
+    output_path: str = "questions_deduped.jsonl",
+    sim_threshold: float = 0.90
+):
+    """
+    Remove near-duplicate questions based on similarity pairs.
+    For each pair (i, j) with similarity >= sim_threshold:
+        - Keep the earlier index
+        - Remove the later index
+    """
+    print(f"\n[+] Deduplicating questions with similarity >= {sim_threshold} ...")
+
+    duplicates = set()
+
+    for i, j, sim in pairs:
+        if sim >= sim_threshold:
+            # remove the later question consistently
+            duplicates.add(max(i, j))
+
+    print(f"[✔] Marked {len(duplicates)} questions as duplicates.")
+
+    kept = 0
+    with open(output_path, "w", encoding="utf-8") as f:
+        for idx, q in enumerate(questions):
+            if idx in duplicates:
+                continue
+            f.write(json.dumps(q, ensure_ascii=False) + "\n")
+            kept += 1
+
+    print(f"[✔] Deduped dataset saved to: {output_path}")
+    print(f"[✔] Total kept: {kept}, removed: {len(duplicates)}\n")
+
 
 # ------------------ MAIN ------------------
 
 def main():
     questions = load_questions(INPUT_FILES)
-
     texts = [build_text_repr(q) for q in questions]
-
     embeddings = compute_embeddings(texts, EMBEDDING_MODEL_NAME)
-
     pairs = find_similar_pairs(embeddings, questions, SIM_THRESHOLD, TOP_K_NEIGHBORS)
 
     write_pairs_csv(OUTPUT_PAIRS_CSV, pairs, questions)
 
+    dedupe_questions_from_pairs(
+        pairs,
+        questions,
+        output_path="questions_deduped.jsonl",
+        sim_threshold=SIM_THRESHOLD,
+    )
+
+
 
 if __name__ == "__main__":
     main()
+
+'''
+[+] Deduplicating questions with similarity >= 0.9 ...
+[✔] Marked 21 questions as duplicates.
+[✔] Deduped dataset saved to: questions_deduped.jsonl
+[✔] Total kept: 519, removed: 21
+'''
