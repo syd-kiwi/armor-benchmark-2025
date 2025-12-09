@@ -1,8 +1,0 @@
-pandas==2.2.3
-torch==2.7.0
-transformers==4.52.0
-accelerate==1.0.1
-anthropic==0.52.1
-openai==1.82.1
-google-genai==1.14.0
-together==1.5.8
