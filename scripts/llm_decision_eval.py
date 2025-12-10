@@ -312,21 +312,19 @@ if __name__ == "__main__":
 
     model_list = [
         #'deepseek-ai/DeepSeek-V3', done
-        'deepseek-ai/DeepSeek-R1-0528-tput',
+        #'deepseek-ai/DeepSeek-R1-0528-tput',
         
-        'mistralai/Mistral-7B-Instruct-v0.2',
-        'mistralai/Ministral-3-14B-Instruct-2512',
-        'mistralai/Mistral-Small-24B-Instruct-2501',
+        #'mistralai/Mistral-7B-Instruct-v0.2',
+        #'mistralai/Ministral-3-14B-Instruct-2512',
+        #'mistralai/Mistral-Small-24B-Instruct-2501',
 
-        'meta-llama/Meta-Llama-3-8B-Instruct-Lite',
-        'meta-llama/Meta-Llama-3-70B-Instruct-Lite',
-        'meta-llama/Llama-4-Scout-17B-16E-Instruct',
+        #'meta-llama/Meta-Llama-3-8B-Instruct-Lite',
+        #'meta-llama/Meta-Llama-3-70B-Instruct-Lite', Not working
+        #'meta-llama/Llama-4-Scout-17B-16E-Instruct',
 
         #"gemini-2.5-flash", done
         #'gemini-2.0-flash', done
         'gemini-3-pro-preview'
-        'google/gemma-2-9b-it'
-        'google/gemma-3n-E4B-it'
 
         #'gpt-5-mini-2025-08-07', done
         #'gpt-4.1-mini-2025-04-14', done
