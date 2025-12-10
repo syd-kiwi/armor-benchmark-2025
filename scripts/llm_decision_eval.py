@@ -319,19 +319,19 @@ if __name__ == "__main__":
         #'mistralai/Mistral-Small-24B-Instruct-2501',
 
         #'meta-llama/Meta-Llama-3-8B-Instruct-Lite',
-        #'meta-llama/Meta-Llama-3-70B-Instruct-Lite', Not working
         #'meta-llama/Llama-4-Scout-17B-16E-Instruct',
 
         #"gemini-2.5-flash", done
         #'gemini-2.0-flash', done
-        'gemini-3-pro-preview'
 
         #'gpt-5-mini-2025-08-07', done
         #'gpt-4.1-mini-2025-04-14', done
         #'gpt-3.5-turbo-0125', done
-        #gpt-4o-2024-08-06', done
-        #'o4-mini-2025-04-16', done
-        #'claude-3-haiku-20240307', done
+        #'gpt-4o-2024-08-06', done
+        
+	#'o4-mini-2025-04-16', done
+        
+	#'claude-3-haiku-20240307', done
         #'claude-3-5-haiku-20241022', done
         #'claude-haiku-4-5-20251001' done
     ]
