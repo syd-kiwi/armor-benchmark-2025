@@ -194,7 +194,7 @@ def online_llm_test_jsonl(client, dataset_path, model_name, output_path, verbose
 
         question, has_option_d = build_question_from_json(obj)
 
-        if "gpt" in model_name_lower or "o4-" in model_name_lower:
+        if "gpt" in model_name_lower or "o3-" in model_name_lower:
             raw_answer = get_answer_openai(client, model_name, system_prompt, question)
         elif "claude" in model_name_lower:
             raw_answer = get_answer_claude(client, model_name, system_prompt, question)
@@ -311,32 +311,27 @@ if __name__ == "__main__":
     output_path = args.output_path
 
     model_list = [
-        #'deepseek-ai/DeepSeek-V3', done
-        #'deepseek-ai/DeepSeek-R1-0528-tput',
-        
-        #'mistralai/Mistral-7B-Instruct-v0.2',
-        #'mistralai/Ministral-3-14B-Instruct-2512',
-        #'mistralai/Mistral-Small-24B-Instruct-2501',
-
-        #'meta-llama/Meta-Llama-3-8B-Instruct-Lite',
-        #'meta-llama/Llama-4-Scout-17B-16E-Instruct',
-
-        #"gemini-2.5-flash", done
-        #'gemini-2.0-flash', done
-
-        #'gpt-5-mini-2025-08-07', done
-        #'gpt-4.1-mini-2025-04-14', done
-        #'gpt-3.5-turbo-0125', done
-        #'gpt-4o-2024-08-06', done
-        
-	#'o4-mini-2025-04-16', done
-        
-	#'claude-3-haiku-20240307', done
-        #'claude-3-5-haiku-20241022', done
-        #'claude-haiku-4-5-20251001' done
+        'deepseek-ai/DeepSeek-V3',
+        'deepseek-ai/DeepSeek-R1-0528-tput',
+        'mistralai/Mistral-7B-Instruct-v0.2',
+        'mistralai/Ministral-3-14B-Instruct-2512',
+        'mistralai/Mistral-Small-24B-Instruct-2501',
+        'meta-llama/Meta-Llama-3-8B-Instruct-Lite',
+        'meta-llama/Llama-4-Scout-17B-16E-Instruct',
+        'gemini-2.5-flash',
+        'gemini-2.0-flash',
+        'gpt-5-mini-2025-08-07',
+        'gpt-4.1-mini-2025-04-14',
+        'gpt-3.5-turbo-0125',
+        'gpt-4o-2024-08-06',
+	    'o4-mini-2025-04-16',
+        'o3-mini',
+        'Qwen/Qwen2.5-7B-Instruct-Turbo',
+        'Qwen/Qwen3-Next-80B-A3B-Thinking',
+	    'claude-3-haiku-20240307',
+        'claude-3-5-haiku-20241022',
+        'claude-haiku-4-5-20251001'
     ]
-
-    
 
     if not args.online_only:
         if not os.path.isdir(models_path):
@@ -355,8 +350,9 @@ if __name__ == "__main__":
         for model_name in model_list:
             print(f"Loading online model {model_name}")
             model_name_lower = model_name.lower()
-
-            if "gpt" in model_name_lower or "o4-" in model_name_lower:
+            if ("gpt" in model_name_lower 
+                or "o4-" in model_name_lower 
+                or model_name_lower.startswith("o3-")):
                 client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             elif "claude" in model_name_lower:
                 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
