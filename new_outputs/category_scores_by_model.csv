@@ -1,0 +1,241 @@
+Category,Total,Correct,Accuracy,Model
+Civilian Harm and Noncombatant Rights,45,43,0.956,llama-4-scout-17b-16e-instruct
+Civilians on the Battlefield (COB),45,44,0.978,llama-4-scout-17b-16e-instruct
+Cyber Operations,45,44,0.978,llama-4-scout-17b-16e-instruct
+Discrimination and Cultural Sensitivity,45,44,0.978,llama-4-scout-17b-16e-instruct
+False Reporting and Accurate Reporting,45,40,0.889,llama-4-scout-17b-16e-instruct
+Mission-Specific ROE Constraints,45,44,0.978,llama-4-scout-17b-16e-instruct
+Operational Moral Reasoning,45,43,0.956,llama-4-scout-17b-16e-instruct
+Positive Identification and Hostile Intent,45,42,0.933,llama-4-scout-17b-16e-instruct
+Proportionality and Necessity,45,42,0.933,llama-4-scout-17b-16e-instruct
+The Law of Neutrality,45,42,0.933,llama-4-scout-17b-16e-instruct
+Treatment of Detainees and Prisoners,45,43,0.956,llama-4-scout-17b-16e-instruct
+Weapons Control Status (WCS),45,38,0.844,llama-4-scout-17b-16e-instruct
+Civilian Harm and Noncombatant Rights,45,43,0.956,o3-mini
+Civilians on the Battlefield (COB),45,44,0.978,o3-mini
+Cyber Operations,45,43,0.956,o3-mini
+Discrimination and Cultural Sensitivity,45,45,1.0,o3-mini
+False Reporting and Accurate Reporting,45,39,0.867,o3-mini
+Mission-Specific ROE Constraints,45,42,0.933,o3-mini
+Operational Moral Reasoning,45,43,0.956,o3-mini
+Positive Identification and Hostile Intent,45,40,0.889,o3-mini
+Proportionality and Necessity,45,41,0.911,o3-mini
+The Law of Neutrality,45,43,0.956,o3-mini
+Treatment of Detainees and Prisoners,45,43,0.956,o3-mini
+Weapons Control Status (WCS),45,41,0.911,o3-mini
+Civilian Harm and Noncombatant Rights,45,37,0.822,meta-llama-3-8b-instruct-lite
+Civilians on the Battlefield (COB),45,42,0.933,meta-llama-3-8b-instruct-lite
+Cyber Operations,45,42,0.933,meta-llama-3-8b-instruct-lite
+Discrimination and Cultural Sensitivity,45,43,0.956,meta-llama-3-8b-instruct-lite
+False Reporting and Accurate Reporting,45,40,0.889,meta-llama-3-8b-instruct-lite
+Mission-Specific ROE Constraints,45,40,0.889,meta-llama-3-8b-instruct-lite
+Operational Moral Reasoning,45,38,0.844,meta-llama-3-8b-instruct-lite
+Positive Identification and Hostile Intent,45,41,0.911,meta-llama-3-8b-instruct-lite
+Proportionality and Necessity,45,43,0.956,meta-llama-3-8b-instruct-lite
+The Law of Neutrality,45,40,0.889,meta-llama-3-8b-instruct-lite
+Treatment of Detainees and Prisoners,45,40,0.889,meta-llama-3-8b-instruct-lite
+Weapons Control Status (WCS),45,33,0.733,meta-llama-3-8b-instruct-lite
+Civilian Harm and Noncombatant Rights,45,43,0.956,gpt-4.1-mini-2025-04-14
+Civilians on the Battlefield (COB),45,43,0.956,gpt-4.1-mini-2025-04-14
+Cyber Operations,45,44,0.978,gpt-4.1-mini-2025-04-14
+Discrimination and Cultural Sensitivity,45,43,0.956,gpt-4.1-mini-2025-04-14
+False Reporting and Accurate Reporting,45,41,0.911,gpt-4.1-mini-2025-04-14
+Mission-Specific ROE Constraints,45,44,0.978,gpt-4.1-mini-2025-04-14
+Operational Moral Reasoning,45,43,0.956,gpt-4.1-mini-2025-04-14
+Positive Identification and Hostile Intent,45,42,0.933,gpt-4.1-mini-2025-04-14
+Proportionality and Necessity,45,42,0.933,gpt-4.1-mini-2025-04-14
+The Law of Neutrality,45,45,1.0,gpt-4.1-mini-2025-04-14
+Treatment of Detainees and Prisoners,45,44,0.978,gpt-4.1-mini-2025-04-14
+Weapons Control Status (WCS),45,39,0.867,gpt-4.1-mini-2025-04-14
+Civilian Harm and Noncombatant Rights,45,44,0.978,gemini-2.0-flash
+Civilians on the Battlefield (COB),45,43,0.956,gemini-2.0-flash
+Cyber Operations,45,44,0.978,gemini-2.0-flash
+Discrimination and Cultural Sensitivity,45,43,0.956,gemini-2.0-flash
+False Reporting and Accurate Reporting,45,44,0.978,gemini-2.0-flash
+Mission-Specific ROE Constraints,45,42,0.933,gemini-2.0-flash
+Operational Moral Reasoning,45,43,0.956,gemini-2.0-flash
+Positive Identification and Hostile Intent,45,42,0.933,gemini-2.0-flash
+Proportionality and Necessity,45,41,0.911,gemini-2.0-flash
+The Law of Neutrality,45,45,1.0,gemini-2.0-flash
+Treatment of Detainees and Prisoners,45,44,0.978,gemini-2.0-flash
+Weapons Control Status (WCS),45,40,0.889,gemini-2.0-flash
+Civilian Harm and Noncombatant Rights,45,45,1.0,mistral-small-24b-instruct-2501
+Civilians on the Battlefield (COB),45,42,0.933,mistral-small-24b-instruct-2501
+Cyber Operations,45,42,0.933,mistral-small-24b-instruct-2501
+Discrimination and Cultural Sensitivity,45,44,0.978,mistral-small-24b-instruct-2501
+False Reporting and Accurate Reporting,45,38,0.844,mistral-small-24b-instruct-2501
+Mission-Specific ROE Constraints,45,41,0.911,mistral-small-24b-instruct-2501
+Operational Moral Reasoning,45,43,0.956,mistral-small-24b-instruct-2501
+Positive Identification and Hostile Intent,45,41,0.911,mistral-small-24b-instruct-2501
+Proportionality and Necessity,45,41,0.911,mistral-small-24b-instruct-2501
+The Law of Neutrality,45,40,0.889,mistral-small-24b-instruct-2501
+Treatment of Detainees and Prisoners,45,43,0.956,mistral-small-24b-instruct-2501
+Weapons Control Status (WCS),45,36,0.8,mistral-small-24b-instruct-2501
+Civilian Harm and Noncombatant Rights,45,44,0.978,o4-mini-2025-04-16
+Civilians on the Battlefield (COB),45,44,0.978,o4-mini-2025-04-16
+Cyber Operations,45,43,0.956,o4-mini-2025-04-16
+Discrimination and Cultural Sensitivity,45,43,0.956,o4-mini-2025-04-16
+False Reporting and Accurate Reporting,45,43,0.956,o4-mini-2025-04-16
+Mission-Specific ROE Constraints,45,43,0.956,o4-mini-2025-04-16
+Operational Moral Reasoning,45,44,0.978,o4-mini-2025-04-16
+Positive Identification and Hostile Intent,45,40,0.889,o4-mini-2025-04-16
+Proportionality and Necessity,45,40,0.889,o4-mini-2025-04-16
+The Law of Neutrality,45,44,0.978,o4-mini-2025-04-16
+Treatment of Detainees and Prisoners,45,43,0.956,o4-mini-2025-04-16
+Weapons Control Status (WCS),45,41,0.911,o4-mini-2025-04-16
+Civilian Harm and Noncombatant Rights,45,41,0.911,qwen2.5-7b-instruct-turbo
+Civilians on the Battlefield (COB),45,41,0.911,qwen2.5-7b-instruct-turbo
+Cyber Operations,45,43,0.956,qwen2.5-7b-instruct-turbo
+Discrimination and Cultural Sensitivity,45,45,1.0,qwen2.5-7b-instruct-turbo
+False Reporting and Accurate Reporting,45,38,0.844,qwen2.5-7b-instruct-turbo
+Mission-Specific ROE Constraints,45,41,0.911,qwen2.5-7b-instruct-turbo
+Operational Moral Reasoning,45,42,0.933,qwen2.5-7b-instruct-turbo
+Positive Identification and Hostile Intent,45,40,0.889,qwen2.5-7b-instruct-turbo
+Proportionality and Necessity,45,38,0.844,qwen2.5-7b-instruct-turbo
+The Law of Neutrality,45,41,0.911,qwen2.5-7b-instruct-turbo
+Treatment of Detainees and Prisoners,45,44,0.978,qwen2.5-7b-instruct-turbo
+Weapons Control Status (WCS),45,37,0.822,qwen2.5-7b-instruct-turbo
+Civilian Harm and Noncombatant Rights,45,44,0.978,gpt-5-mini-2025-08-07
+Civilians on the Battlefield (COB),45,43,0.956,gpt-5-mini-2025-08-07
+Cyber Operations,45,43,0.956,gpt-5-mini-2025-08-07
+Discrimination and Cultural Sensitivity,45,43,0.956,gpt-5-mini-2025-08-07
+False Reporting and Accurate Reporting,45,42,0.933,gpt-5-mini-2025-08-07
+Mission-Specific ROE Constraints,45,45,1.0,gpt-5-mini-2025-08-07
+Operational Moral Reasoning,45,42,0.933,gpt-5-mini-2025-08-07
+Positive Identification and Hostile Intent,45,39,0.867,gpt-5-mini-2025-08-07
+Proportionality and Necessity,45,40,0.889,gpt-5-mini-2025-08-07
+The Law of Neutrality,45,44,0.978,gpt-5-mini-2025-08-07
+Treatment of Detainees and Prisoners,45,43,0.956,gpt-5-mini-2025-08-07
+Weapons Control Status (WCS),45,41,0.911,gpt-5-mini-2025-08-07
+Civilian Harm and Noncombatant Rights,45,42,0.933,claude-3-5-haiku-20241022
+Civilians on the Battlefield (COB),45,43,0.956,claude-3-5-haiku-20241022
+Cyber Operations,45,43,0.956,claude-3-5-haiku-20241022
+Discrimination and Cultural Sensitivity,45,43,0.956,claude-3-5-haiku-20241022
+False Reporting and Accurate Reporting,45,37,0.822,claude-3-5-haiku-20241022
+Mission-Specific ROE Constraints,45,44,0.978,claude-3-5-haiku-20241022
+Operational Moral Reasoning,45,43,0.956,claude-3-5-haiku-20241022
+Positive Identification and Hostile Intent,45,39,0.867,claude-3-5-haiku-20241022
+Proportionality and Necessity,45,39,0.867,claude-3-5-haiku-20241022
+The Law of Neutrality,45,42,0.933,claude-3-5-haiku-20241022
+Treatment of Detainees and Prisoners,45,43,0.956,claude-3-5-haiku-20241022
+Weapons Control Status (WCS),45,39,0.867,claude-3-5-haiku-20241022
+Civilian Harm and Noncombatant Rights,45,40,0.889,ministral-3-14b-instruct-2512
+Civilians on the Battlefield (COB),45,40,0.889,ministral-3-14b-instruct-2512
+Cyber Operations,45,43,0.956,ministral-3-14b-instruct-2512
+Discrimination and Cultural Sensitivity,45,42,0.933,ministral-3-14b-instruct-2512
+False Reporting and Accurate Reporting,45,34,0.756,ministral-3-14b-instruct-2512
+Mission-Specific ROE Constraints,45,38,0.844,ministral-3-14b-instruct-2512
+Operational Moral Reasoning,45,41,0.911,ministral-3-14b-instruct-2512
+Positive Identification and Hostile Intent,45,37,0.822,ministral-3-14b-instruct-2512
+Proportionality and Necessity,45,37,0.822,ministral-3-14b-instruct-2512
+The Law of Neutrality,45,38,0.844,ministral-3-14b-instruct-2512
+Treatment of Detainees and Prisoners,45,40,0.889,ministral-3-14b-instruct-2512
+Weapons Control Status (WCS),45,37,0.822,ministral-3-14b-instruct-2512
+Civilian Harm and Noncombatant Rights,45,38,0.844,mistral-7b-instruct-v0.2
+Civilians on the Battlefield (COB),45,35,0.778,mistral-7b-instruct-v0.2
+Cyber Operations,45,39,0.867,mistral-7b-instruct-v0.2
+Discrimination and Cultural Sensitivity,45,43,0.956,mistral-7b-instruct-v0.2
+False Reporting and Accurate Reporting,45,34,0.756,mistral-7b-instruct-v0.2
+Mission-Specific ROE Constraints,45,36,0.8,mistral-7b-instruct-v0.2
+Operational Moral Reasoning,45,39,0.867,mistral-7b-instruct-v0.2
+Positive Identification and Hostile Intent,45,33,0.733,mistral-7b-instruct-v0.2
+Proportionality and Necessity,45,31,0.689,mistral-7b-instruct-v0.2
+The Law of Neutrality,45,35,0.778,mistral-7b-instruct-v0.2
+Treatment of Detainees and Prisoners,45,41,0.911,mistral-7b-instruct-v0.2
+Weapons Control Status (WCS),45,34,0.756,mistral-7b-instruct-v0.2
+Civilian Harm and Noncombatant Rights,45,44,0.978,claude-haiku-4-5-20251001
+Civilians on the Battlefield (COB),45,43,0.956,claude-haiku-4-5-20251001
+Cyber Operations,45,42,0.933,claude-haiku-4-5-20251001
+Discrimination and Cultural Sensitivity,45,43,0.956,claude-haiku-4-5-20251001
+False Reporting and Accurate Reporting,45,40,0.889,claude-haiku-4-5-20251001
+Mission-Specific ROE Constraints,45,42,0.933,claude-haiku-4-5-20251001
+Operational Moral Reasoning,45,42,0.933,claude-haiku-4-5-20251001
+Positive Identification and Hostile Intent,45,41,0.911,claude-haiku-4-5-20251001
+Proportionality and Necessity,45,40,0.889,claude-haiku-4-5-20251001
+The Law of Neutrality,45,44,0.978,claude-haiku-4-5-20251001
+Treatment of Detainees and Prisoners,45,44,0.978,claude-haiku-4-5-20251001
+Weapons Control Status (WCS),45,38,0.844,claude-haiku-4-5-20251001
+Civilian Harm and Noncombatant Rights,45,43,0.956,gemini-2.5-flash
+Civilians on the Battlefield (COB),45,44,0.978,gemini-2.5-flash
+Cyber Operations,45,42,0.933,gemini-2.5-flash
+Discrimination and Cultural Sensitivity,45,43,0.956,gemini-2.5-flash
+False Reporting and Accurate Reporting,45,40,0.889,gemini-2.5-flash
+Mission-Specific ROE Constraints,45,44,0.978,gemini-2.5-flash
+Operational Moral Reasoning,45,44,0.978,gemini-2.5-flash
+Positive Identification and Hostile Intent,45,43,0.956,gemini-2.5-flash
+Proportionality and Necessity,45,40,0.889,gemini-2.5-flash
+The Law of Neutrality,45,44,0.978,gemini-2.5-flash
+Treatment of Detainees and Prisoners,45,44,0.978,gemini-2.5-flash
+Weapons Control Status (WCS),45,37,0.822,gemini-2.5-flash
+Civilian Harm and Noncombatant Rights,45,41,0.911,deepseek-r1-0528-tput
+Civilians on the Battlefield (COB),45,44,0.978,deepseek-r1-0528-tput
+Cyber Operations,45,41,0.911,deepseek-r1-0528-tput
+Discrimination and Cultural Sensitivity,45,42,0.933,deepseek-r1-0528-tput
+False Reporting and Accurate Reporting,45,41,0.911,deepseek-r1-0528-tput
+Mission-Specific ROE Constraints,45,43,0.956,deepseek-r1-0528-tput
+Operational Moral Reasoning,45,43,0.956,deepseek-r1-0528-tput
+Positive Identification and Hostile Intent,45,41,0.911,deepseek-r1-0528-tput
+Proportionality and Necessity,45,38,0.844,deepseek-r1-0528-tput
+The Law of Neutrality,45,44,0.978,deepseek-r1-0528-tput
+Treatment of Detainees and Prisoners,45,44,0.978,deepseek-r1-0528-tput
+Weapons Control Status (WCS),45,38,0.844,deepseek-r1-0528-tput
+Civilian Harm and Noncombatant Rights,45,41,0.911,claude-3-haiku-20240307
+Civilians on the Battlefield (COB),45,43,0.956,claude-3-haiku-20240307
+Cyber Operations,45,44,0.978,claude-3-haiku-20240307
+Discrimination and Cultural Sensitivity,45,43,0.956,claude-3-haiku-20240307
+False Reporting and Accurate Reporting,45,41,0.911,claude-3-haiku-20240307
+Mission-Specific ROE Constraints,45,43,0.956,claude-3-haiku-20240307
+Operational Moral Reasoning,45,40,0.889,claude-3-haiku-20240307
+Positive Identification and Hostile Intent,45,42,0.933,claude-3-haiku-20240307
+Proportionality and Necessity,45,41,0.911,claude-3-haiku-20240307
+The Law of Neutrality,45,44,0.978,claude-3-haiku-20240307
+Treatment of Detainees and Prisoners,45,43,0.956,claude-3-haiku-20240307
+Weapons Control Status (WCS),45,39,0.867,claude-3-haiku-20240307
+Civilian Harm and Noncombatant Rights,45,34,0.756,qwen3-next-80b-a3b-thinking
+Civilians on the Battlefield (COB),45,42,0.933,qwen3-next-80b-a3b-thinking
+Cyber Operations,45,36,0.8,qwen3-next-80b-a3b-thinking
+Discrimination and Cultural Sensitivity,45,37,0.822,qwen3-next-80b-a3b-thinking
+False Reporting and Accurate Reporting,45,34,0.756,qwen3-next-80b-a3b-thinking
+Mission-Specific ROE Constraints,45,39,0.867,qwen3-next-80b-a3b-thinking
+Operational Moral Reasoning,45,38,0.844,qwen3-next-80b-a3b-thinking
+Positive Identification and Hostile Intent,45,36,0.8,qwen3-next-80b-a3b-thinking
+Proportionality and Necessity,45,33,0.733,qwen3-next-80b-a3b-thinking
+The Law of Neutrality,45,40,0.889,qwen3-next-80b-a3b-thinking
+Treatment of Detainees and Prisoners,45,42,0.933,qwen3-next-80b-a3b-thinking
+Weapons Control Status (WCS),45,34,0.756,qwen3-next-80b-a3b-thinking
+Civilian Harm and Noncombatant Rights,45,45,1.0,gpt-4o-2024-08-06
+Civilians on the Battlefield (COB),45,43,0.956,gpt-4o-2024-08-06
+Cyber Operations,45,43,0.956,gpt-4o-2024-08-06
+Discrimination and Cultural Sensitivity,45,44,0.978,gpt-4o-2024-08-06
+False Reporting and Accurate Reporting,45,42,0.933,gpt-4o-2024-08-06
+Mission-Specific ROE Constraints,45,44,0.978,gpt-4o-2024-08-06
+Operational Moral Reasoning,45,43,0.956,gpt-4o-2024-08-06
+Positive Identification and Hostile Intent,45,42,0.933,gpt-4o-2024-08-06
+Proportionality and Necessity,45,41,0.911,gpt-4o-2024-08-06
+The Law of Neutrality,45,43,0.956,gpt-4o-2024-08-06
+Treatment of Detainees and Prisoners,45,44,0.978,gpt-4o-2024-08-06
+Weapons Control Status (WCS),45,41,0.911,gpt-4o-2024-08-06
+Civilian Harm and Noncombatant Rights,45,38,0.844,gpt-3.5-turbo-0125
+Civilians on the Battlefield (COB),45,42,0.933,gpt-3.5-turbo-0125
+Cyber Operations,45,42,0.933,gpt-3.5-turbo-0125
+Discrimination and Cultural Sensitivity,45,43,0.956,gpt-3.5-turbo-0125
+False Reporting and Accurate Reporting,45,36,0.8,gpt-3.5-turbo-0125
+Mission-Specific ROE Constraints,45,43,0.956,gpt-3.5-turbo-0125
+Operational Moral Reasoning,45,41,0.911,gpt-3.5-turbo-0125
+Positive Identification and Hostile Intent,45,41,0.911,gpt-3.5-turbo-0125
+Proportionality and Necessity,45,39,0.867,gpt-3.5-turbo-0125
+The Law of Neutrality,45,40,0.889,gpt-3.5-turbo-0125
+Treatment of Detainees and Prisoners,45,43,0.956,gpt-3.5-turbo-0125
+Weapons Control Status (WCS),45,36,0.8,gpt-3.5-turbo-0125
+Civilian Harm and Noncombatant Rights,45,44,0.978,deepseek-v3
+Civilians on the Battlefield (COB),45,43,0.956,deepseek-v3
+Cyber Operations,45,42,0.933,deepseek-v3
+Discrimination and Cultural Sensitivity,45,42,0.933,deepseek-v3
+False Reporting and Accurate Reporting,45,41,0.911,deepseek-v3
+Mission-Specific ROE Constraints,45,45,1.0,deepseek-v3
+Operational Moral Reasoning,45,45,1.0,deepseek-v3
+Positive Identification and Hostile Intent,45,41,0.911,deepseek-v3
+Proportionality and Necessity,45,40,0.889,deepseek-v3
+The Law of Neutrality,45,44,0.978,deepseek-v3
+Treatment of Detainees and Prisoners,45,44,0.978,deepseek-v3
+Weapons Control Status (WCS),45,41,0.911,deepseek-v3
