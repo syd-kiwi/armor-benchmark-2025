@@ -10,11 +10,13 @@ from sklearn.neighbors import NearestNeighbors
 
 
 # ------------------ CONFIG ------------------
+dataset_folder = Path.home() / "Documents" / "armor-benchmark-2025" / "dataset"
+
 
 INPUT_FILES = [
-    "questions_generated_multi_llm.jsonl",
-    "questions_generated_multi_llm_v2.jsonl",
-    "questions_generated_multi_llm_v3.jsonl",
+    dataset_folder / "questions_generated_multi_llm.jsonl",
+    dataset_folder / "questions_generated_multi_llm_v2.jsonl",
+    dataset_folder / "questions_generated_multi_llm_v3.jsonl",
 ]
 
 OUTPUT_PAIRS_CSV = "question_similarity_pairs.csv"
@@ -22,6 +24,10 @@ OUTPUT_PAIRS_CSV = "question_similarity_pairs.csv"
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
 SIM_THRESHOLD = 0.90
 TOP_K_NEIGHBORS = 10
+
+# Plot settings
+PLOT_MAX_EDGES = 300
+PLOT_OUT_PATH = "embedding_projection_edges.png"
 
 
 # ------------------ LOADING ------------------
@@ -149,6 +155,9 @@ def write_pairs_csv(path: str, pairs: List[Tuple[int, int, float]], questions: L
 
     print(f"\n[✔] Done. Written to {path}\n")
 
+
+# ------------------ DEDUPE ------------------
+
 def dedupe_questions_from_pairs(
     pairs: List[Tuple[int, int, float]],
     questions: List[Dict[str, Any]],
@@ -164,10 +173,8 @@ def dedupe_questions_from_pairs(
     print(f"\n[+] Deduplicating questions with similarity >= {sim_threshold} ...")
 
     duplicates = set()
-
     for i, j, sim in pairs:
         if sim >= sim_threshold:
-            # remove the later question consistently
             duplicates.add(max(i, j))
 
     print(f"[✔] Marked {len(duplicates)} questions as duplicates.")
@@ -184,6 +191,71 @@ def dedupe_questions_from_pairs(
     print(f"[✔] Total kept: {kept}, removed: {len(duplicates)}\n")
 
 
+# ------------------ PLOT: EMBEDDING PROJECTION WITH EDGES ------------------
+
+def plot_embedding_projection_with_edges(
+    embeddings: np.ndarray,
+    pairs: List[Tuple[int, int, float]],
+    sim_threshold: float,
+    max_edges: int = 300,
+    out_path: str = "embedding_projection_edges.png",
+):
+    """
+    Projects embeddings to 2D (PCA) and draws edges for high-similarity pairs.
+    """
+    import matplotlib.pyplot as plt
+    from sklearn.decomposition import PCA
+
+    if embeddings is None or len(embeddings) == 0:
+        print("[!] No embeddings to plot.")
+        return
+
+    strong_pairs = [p for p in pairs if p[2] >= sim_threshold]
+    if len(strong_pairs) == 0:
+        print(f"[!] No pairs >= threshold {sim_threshold} to plot.")
+        return
+
+    xy = PCA(n_components=2, random_state=7).fit_transform(embeddings)
+
+    strong_pairs.sort(key=lambda t: t[2], reverse=True)
+    strong_pairs = strong_pairs[:max_edges]
+
+    plt.figure(figsize=(9, 7))
+    plt.scatter(xy[:, 0], xy[:, 1], s=10)
+
+    for i, j, sim in strong_pairs:
+        plt.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]], alpha=0.2)
+
+    plt.title(f"PCA projection with similarity edges (>= {sim_threshold}, top {len(strong_pairs)})")
+    plt.xlabel("PC1")
+    plt.ylabel("PC2")
+    plt.tight_layout()
+    plt.savefig(out_path, dpi=300)
+    plt.show()
+
+    print(f"[✔] Saved plot to: {out_path}")
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.neighbors import NearestNeighbors
+
+def plot_nearest_neighbor_similarity(embeddings, sim_threshold=0.90):
+    nbrs = NearestNeighbors(n_neighbors=2, metric="cosine", n_jobs=-1)
+    nbrs.fit(embeddings)
+    distances, _ = nbrs.kneighbors(embeddings, return_distance=True)
+
+    nn_sim = 1.0 - distances[:, 1]  # nearest other point
+
+    plt.figure()
+    plt.plot(np.sort(nn_sim))
+    plt.axhline(sim_threshold)
+    plt.title("Sorted nearest neighbor cosine similarity")
+    plt.xlabel("question rank")
+    plt.ylabel("nearest neighbor cosine similarity")
+    plt.show()
+
+
+
 # ------------------ MAIN ------------------
 
 def main():
@@ -194,41 +266,21 @@ def main():
 
     write_pairs_csv(OUTPUT_PAIRS_CSV, pairs, questions)
 
-    dedupe_questions_from_pairs(
-        pairs,
-        questions,
-        output_path="questions_deduped.jsonl",
+    # NEW: plot what is happening geometrically in embedding space
+    plot_embedding_projection_with_edges(
+        embeddings=embeddings,
+        pairs=pairs,
         sim_threshold=SIM_THRESHOLD,
+        max_edges=PLOT_MAX_EDGES,
+        out_path=PLOT_OUT_PATH,
+    )
+
+    plot_nearest_neighbor_similarity(
+        embeddings=embeddings,
+        sim_threshold=SIM_THRESHOLD
     )
 
 
 
 if __name__ == "__main__":
     main()
-
-'''
-[+] Deduplicating questions with similarity >= 0.9 ...
-[✔] Marked 21 questions as duplicates.
-[✔] Deduped dataset saved to: questions_deduped.jsonl
-[✔] Total kept: 519, removed: 21
-'''
-
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-
-def plot_embedding_projection_with_edges(embeddings, pairs, max_edges=300):
-    xy = PCA(n_components=2).fit_transform(embeddings)
-
-    plt.figure(figsize=(8, 6))
-    plt.scatter(xy[:, 0], xy[:, 1], s=10)
-
-    pairs_sorted = sorted(pairs, key=lambda t: t[2], reverse=True)[:max_edges]
-    for i, j, sim in pairs_sorted:
-        plt.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]], alpha=0.2)
-
-    plt.title("PCA projection with similarity edges")
-    plt.xlabel("PC1")
-    plt.ylabel("PC2")
-    plt.tight_layout()
-    plt.show()

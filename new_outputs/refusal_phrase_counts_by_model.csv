@@ -1,0 +1,21 @@
+Model,Total_Questions,Refused_Questions,Refusal_Rate
+Qwen 3 Next 80B,540,9,0.0167
+DeepSeek R1,540,7,0.013
+LLaMA 3 8B,540,6,0.0111
+Claude 4.5 Haiku,540,6,0.0111
+Claude 3.5 Haiku,540,3,0.0056
+LLaMA 4 17B,540,2,0.0037
+Claude 3 Haiku,540,0,0.0
+DeepSeek V3,540,0,0.0
+GPT-3.5 Turbo,540,0,0.0
+GPT-4.1 Mini,540,0,0.0
+Gemini 2.5,540,0,0.0
+Gemini 2.0,540,0,0.0
+GPT-5 Mini,540,0,0.0
+GPT-4o,540,0,0.0
+Mistral 7B,540,0,0.0
+Ministral 14B,540,0,0.0
+Mistral Small 24B,540,0,0.0
+O3 Mini,540,0,0.0
+O4 Mini,540,0,0.0
+Qwen 2.5 7B Turbo,540,0,0.0
