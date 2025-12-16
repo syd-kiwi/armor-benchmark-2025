@@ -212,3 +212,23 @@ if __name__ == "__main__":
 [✔] Deduped dataset saved to: questions_deduped.jsonl
 [✔] Total kept: 519, removed: 21
 '''
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+def plot_embedding_projection_with_edges(embeddings, pairs, max_edges=300):
+    xy = PCA(n_components=2).fit_transform(embeddings)
+
+    plt.figure(figsize=(8, 6))
+    plt.scatter(xy[:, 0], xy[:, 1], s=10)
+
+    pairs_sorted = sorted(pairs, key=lambda t: t[2], reverse=True)[:max_edges]
+    for i, j, sim in pairs_sorted:
+        plt.plot([xy[i, 0], xy[j, 0]], [xy[i, 1], xy[j, 1]], alpha=0.2)
+
+    plt.title("PCA projection with similarity edges")
+    plt.xlabel("PC1")
+    plt.ylabel("PC2")
+    plt.tight_layout()
+    plt.show()
