@@ -2,6 +2,24 @@
 
 ARMOR Benchmark 2025 is a doctrine-grounded benchmark for evaluating how large language models (LLMs) answer multiple-choice questions about military decision-making, law-of-war concepts, rules of engagement, and professional ethics. The benchmark is designed for educational and analytical evaluation of model behavior against source-backed policy documents.
 
+## Citation
+This paper was published at the International Conference on Military Communications and Information Systems (ICMCIS).
+Paper: https://arxiv.org/abs/2605.00245
+Conference: https://icmcis.eu/
+
+If you use this code or benchmark in your work, please cite our paper:
+
+```bibtex
+@misc{johns2026armorbenchmark,
+  title        = {ARMOR-BENCH 2025: Evaluating Large Language Models for Military Decision-Making},
+  author       = {Johns, Sydney},
+  year         = {2026},
+  eprint       = {2605.00245},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.AI},
+  url          = {https://arxiv.org/abs/2605.00245}
+}
+
 ## What is in this repository?
 
 This repository contains the benchmark dataset, source doctrine PDFs, question-generation and model-evaluation scripts, and aggregate analysis outputs.
