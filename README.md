@@ -18,7 +18,7 @@ If you use this code or benchmark in your work, please cite our paper:
   archivePrefix = {arXiv},
   primaryClass = {cs.AI},
   url          = {https://arxiv.org/abs/2605.00245}
-}
+```
 
 ## What is in this repository?
 
