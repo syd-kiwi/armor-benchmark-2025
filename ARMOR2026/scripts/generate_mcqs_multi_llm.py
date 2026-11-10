@@ -183,16 +183,39 @@ def configured_models(overrides=None):
                 else os.environ.get(MODEL_ENV[p], "")).strip() for p in PROVIDERS}
 
 
-def make_clients():
-    # Only called after explicit --run and full configuration validation.
-    from openai import OpenAI
-    from google import genai
-    from google.genai import types
-    from anthropic import Anthropic
-    return {"gpt": OpenAI(api_key=os.environ[KEY_ENV["gpt"]], max_retries=0, timeout=120),
-            "gemini": genai.Client(api_key=os.environ[KEY_ENV["gemini"]],
-                                   http_options=types.HttpOptions(timeout=120000, retry_options=types.HttpRetryOptions(attempts=1))),
-            "claude": Anthropic(api_key=os.environ[KEY_ENV["claude"]], max_retries=0, timeout=120)}
+def make_clients(providers=PROVIDERS):
+    """Import and initialize only the selected providers; no requests here."""
+    clients = {}
+    if "gpt" in providers:
+        from openai import OpenAI
+        clients["gpt"] = OpenAI(api_key=os.environ[KEY_ENV["gpt"]], max_retries=0, timeout=120)
+    if "gemini" in providers:
+        from google import genai
+        from google.genai import types
+        clients["gemini"] = genai.Client(api_key=os.environ[KEY_ENV["gemini"]],
+            http_options=types.HttpOptions(timeout=120000, retry_options=types.HttpRetryOptions(attempts=1)))
+    if "claude" in providers:
+        from anthropic import Anthropic
+        clients["claude"] = Anthropic(api_key=os.environ[KEY_ENV["claude"]], max_retries=0, timeout=120)
+    return clients
+
+
+def safe_error(exc):
+    """Keep useful status/message, remove credentials and URLs before logging."""
+    code = getattr(exc, 'code', None) or getattr(exc, 'status_code', None)
+    message = getattr(exc, 'message', None) or str(exc)
+    if not isinstance(message, str):
+        message = type(exc).__name__
+    for name in ('GEMINI_API_KEY', 'GOOGLE_API_KEY', 'OPENAI_API_KEY', 'ANTHROPIC_API_KEY'):
+        value = os.environ.get(name)
+        if value:
+            message = message.replace(value, '[REDACTED]')
+    message = re.sub(r'AIza[\w-]+', '[REDACTED]', message)
+    message = re.sub(r'https?://\S+', '[URL omitted]', message)
+    message = re.sub(r'(?i)(?:bearer\s+|(?:api[_-]?key|authorization)\s*[:=]\s*)[^\s,;]+', '[REDACTED]', message)
+    return {'error_type': type(exc).__name__, 'http_status': code if isinstance(code, (int, str)) else None,
+            'message': ' '.join(message.split())[:600]}
+
 
 
 def call_llm(client, provider, model, prompt, max_tokens):
@@ -244,6 +267,10 @@ def append(path, value):
 
 
 def execute(tasks, models, args):
+    expected_counts = Counter()
+    for task in tasks:
+        expected_counts[task["provider"]] += len(task["behaviors"])
+    expected_total = sum(expected_counts.values())
     output = args.output
     raw = output.with_suffix(output.suffix + ".raw.jsonl")
     manifest_path = output.with_suffix(output.suffix + ".manifest.json")
@@ -259,7 +286,7 @@ def execute(tasks, models, args):
     elif manifest_path.exists() or raw.exists():
         raise ValueError("Run files exist; use --resume or a new output path")
     # Import SDKs and validate their installation before creating run files.
-    clients = make_clients()
+    clients = make_clients(tuple(expected_counts))
     try:
         output.parent.mkdir(parents=True, exist_ok=True)
         if not args.resume:
@@ -273,6 +300,7 @@ def execute(tasks, models, args):
                     raise ValueError("Duplicate completed task in checkpoint")
                 successful[entry["task_id"]] = entry
         all_records = []
+        new_tasks = 0
         for task in tasks:
             task_id, provider = task["task_id"], task["provider"]
             stems = [normal(x["question"]).casefold() for x in all_records]
@@ -281,6 +309,9 @@ def execute(tasks, models, args):
                 items = parse_questions(response["text"], task, stems)
                 all_records.extend(successful[task_id]["records"])
                 continue
+            if args.max_new_tasks is not None and new_tasks >= args.max_new_tasks:
+                print(f"Paused with {len(all_records)}/{expected_total} drafts saved. Resume the same command without --max_new_tasks to finish.")
+                return
             # A paid request is made once; failures stop rather than silently retry.
             response = None
             try:
@@ -289,13 +320,14 @@ def execute(tasks, models, args):
                 records = records_for(items, task, response)
                 append(raw, {"task_id": task_id, "status": "ok", "response": response, "records": records})
                 all_records.extend(records)
-                print(f'{provider}: saved task {task_id}; {len(all_records)}/{args.total_questions} questions')
+                new_tasks += 1
+                print(f'{provider}: saved task {task_id}; {len(all_records)}/{expected_total} questions')
             except Exception as exc:
-                # Preserve generation output, but never log SDK error bodies or credentials.
-                append(raw, {"task_id": task_id, "status": "failed", "error_type": type(exc).__name__,
+                details = safe_error(exc)
+                append(raw, {"task_id": task_id, "status": "failed", **details,
                              "response": response, "timestamp": timestamp()})
-                raise RuntimeError(f"{provider} task {task_id} failed ({type(exc).__name__}). Check API access/model IDs or inspect the local raw checkpoint. --resume retries failed or incomplete tasks and can incur charges; saved successful tasks are skipped.") from None
-        if len(all_records) != args.total_questions or Counter(r["generator_model"] for r in all_records) != quotas(args.total_questions):
+                raise RuntimeError(f"{provider} task {task_id}: {json.dumps(details)}. --resume retries failed or incomplete tasks; saved successful tasks are skipped.") from None
+        if len(all_records) != expected_total or Counter(r["generator_model"] for r in all_records) != expected_counts:
             raise ValueError("Final count/provider quota mismatch; no final file written")
         with output.open("x", encoding="utf-8") as handle:
             for record in all_records:
@@ -312,9 +344,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input_csv", type=Path, default=ROOT / "data/nato/nato_doctrine_snippets.csv")
     parser.add_argument("--provenance_csv", type=Path, default=ROOT / "data/nato/nato_snippet_provenance.csv")
-    parser.add_argument("--output_questions", dest="output", type=Path,
-                        default=ROOT / "results/armor_2026/runs/nato_50_draft.jsonl")
-    parser.add_argument("--total_questions", type=int, default=50)
+    parser.add_argument("--output_questions", dest="output", type=Path)
+    parser.add_argument("--total_questions", type=int, default=50,
+                        help="Overall three-provider plan size; a provider-only run selects its share")
+    parser.add_argument("--provider", choices=("all",) + PROVIDERS, default="all")
+    parser.add_argument("--model", help="Model ID override when selecting one --provider")
+    parser.add_argument("--probe", action="store_true", help="Test one selected provider with a small request")
+    parser.add_argument("--max_new_tasks", type=int, help="Pause after this many successful new generation tasks")
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--max_tokens", type=int, default=8192)
     parser.add_argument("--env_file", type=Path, default=ROOT / ".env")
@@ -324,37 +360,72 @@ def main():
                         help="Gemini model ID; overrides GEMINI_MODEL")
     parser.add_argument("--claude-model", "--claude_model", dest="claude_model",
                         help="Claude model ID; overrides ANTHROPIC_MODEL")
-    parser.add_argument("--run", action="store_true", help="Make paid calls; without this flag show plan only")
-    parser.add_argument("--resume", action="store_true", help="Skip saved successful tasks and retry incomplete tasks")
+    parser.add_argument("--run", action="store_true", help="Make paid calls; otherwise show plan only")
+    parser.add_argument("--resume", action="store_true", help="Skip saved successful tasks in this run")
     args = parser.parse_args()
     try:
-        if args.max_tokens < 1:
-            raise ValueError("max_tokens must be positive")
+        if args.max_tokens < 1 or (args.max_new_tasks is not None and args.max_new_tasks < 1):
+            raise ValueError("Token budget and task limit must be positive")
+        if (args.model or args.probe) and args.provider == "all":
+            raise ValueError("--model and --probe require one --provider: gpt, gemini, or claude")
+        if args.probe and args.resume:
+            raise ValueError("A probe has no checkpoint to resume")
         if args.env_file.exists():
             from dotenv import load_dotenv
             load_dotenv(args.env_file, override=False)
-        rows = load_snippets(args.input_csv, args.provenance_csv)
-        tasks = plan_tasks(rows, args.total_questions, args.seed)
-        models = configured_models({"gpt": args.gpt_model, "gemini": args.gemini_model,
-                                    "claude": args.claude_model})
-        print("Planned questions by provider:", quotas(args.total_questions))
-        print("Planned expected behaviors:", dict(Counter(b for t in tasks for b in t["behaviors"])))
-        print("Matched triples:", sum(t["family_kind"] == "matched_triple" for t in tasks))
-        print("Standalone questions:", sum(t["family_kind"] == "standalone" for t in tasks))
-        for p in PROVIDERS:
+        providers = PROVIDERS if args.provider == "all" else (args.provider,)
+        overrides = {"gpt": args.gpt_model, "gemini": args.gemini_model, "claude": args.claude_model}
+        if args.model is not None:
+            overrides[args.provider] = args.model
+        models = {p: m for p, m in configured_models(overrides).items() if p in providers}
+        tasks = []
+        if args.probe:
+            print(f"Probe only: {args.provider}; no benchmark question generation")
+        else:
+            rows = load_snippets(args.input_csv, args.provenance_csv)
+            tasks = [t for t in plan_tasks(rows, args.total_questions, args.seed) if t["provider"] in providers]
+            counts = Counter()
+            for task in tasks:
+                counts[task["provider"]] += len(task["behaviors"])
+            print("Planned questions by selected provider:", dict(counts))
+            print("Planned expected behaviors:", dict(Counter(b for t in tasks for b in t["behaviors"])))
+            print("Matched triples:", sum(t["family_kind"] == "matched_triple" for t in tasks))
+            print("Standalone questions:", sum(t["family_kind"] == "standalone" for t in tasks))
+        for p in providers:
             print(f'{p}: model {models[p] or "NOT SET"}; key {"set" if os.environ.get(KEY_ENV[p]) else "NOT SET"}')
         if not args.run:
             print("Plan only. No API calls, questions, or run files created. Add --run when ready.")
             return
-        missing = [name for name in KEY_ENV.values()
-                   if not os.environ.get(name, "").strip() or os.environ[name].strip().startswith("YOUR_")]
-        missing += [MODEL_ENV[p] + " (or its model flag)" for p in PROVIDERS
+        missing = [KEY_ENV[p] for p in providers
+                   if not os.environ.get(KEY_ENV[p], "").strip() or os.environ[KEY_ENV[p]].strip().startswith("YOUR_")]
+        missing += [MODEL_ENV[p] + " (or its model flag)" for p in providers
                     if not models[p] or models[p].startswith("YOUR_")]
         if missing:
             raise ValueError("Fill in .env or environment variables: " + ", ".join(missing))
+        if args.probe:
+            clients = make_clients(providers)
+            try:
+                result = call_llm(clients[args.provider], args.provider, models[args.provider],
+                                  'Reply with exactly the JSON object {"ok": true}.', 1024)
+                text = result["text"].strip()
+                if text.startswith("```"):
+                    text = re.sub(r"^```(?:json)?\\s*|\\s*```$", "", text).strip()
+                try:
+                    ok = json.loads(text) == {"ok": True}
+                except ValueError:
+                    ok = False
+                print(f"Probe returned a completed response; valid OK object: {ok}")
+                print("Basic access test only. No question or checkpoint files created.")
+            finally:
+                for client in clients.values():
+                    client.close()
+            return
+        if args.output is None:
+            name = f"nato_{args.total_questions}_draft.jsonl" if args.provider == "all" else f"nato_{args.provider}_draft.jsonl"
+            args.output = ROOT / "results/armor_2026/runs" / name
         execute(tasks, models, args)
-    except (ValueError, RuntimeError, ImportError, OSError) as exc:
-        parser.exit(1, f"Error: {exc}\n")
+    except Exception as exc:
+        parser.exit(1, "Error: " + json.dumps(safe_error(exc)) + "\n")
 
 
 if __name__ == "__main__":

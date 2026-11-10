@@ -154,5 +154,80 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(claude.messages.create.call_args.kwargs['max_tokens'], 500)
 
 
+class ProviderSelectionTests(unittest.TestCase):
+    def test_claude_selection_needs_only_claude_settings(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
+            with patch.object(generation, 'execute') as execute:
+                with patch('sys.argv', ['generator', '--provider', 'claude', '--model', 'mock-claude',
+                                        '--run', '--env_file', str(Path(tmp)/'absent')]):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.main()
+                tasks, models, args = execute.call_args.args
+                self.assertEqual({t['provider'] for t in tasks}, {'claude'})
+                self.assertEqual(sum(len(t['behaviors']) for t in tasks), 16)
+                self.assertEqual(models, {'claude': 'mock-claude'})
+                self.assertEqual(args.output.name, 'nato_claude_draft.jsonl')
+
+    def test_probe_only_selected_provider_and_no_files(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
+            client = Mock()
+            with patch.object(generation, 'make_clients', return_value={'claude': client}) as factory:
+                with patch.object(generation, 'call_llm', return_value={'text': '{"ok":true}'}) as call:
+                    with patch('sys.argv', ['generator', '--provider', 'claude', '--model', 'mock-claude',
+                                            '--probe', '--run', '--env_file', str(Path(tmp)/'absent')]):
+                        with contextlib.redirect_stdout(io.StringIO()):
+                            generation.main()
+                    factory.assert_called_once_with(('claude',))
+                    call.assert_called_once()
+                    self.assertEqual(call.call_args.args[1], 'claude')
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_all_provider_probe_is_rejected_before_client_creation(self):
+        with patch.object(generation, 'make_clients') as clients:
+            with patch('sys.argv', ['generator', '--probe', '--run']):
+                with contextlib.redirect_stderr(io.StringIO()):
+                    with self.assertRaises(SystemExit):
+                        generation.main()
+            clients.assert_not_called()
+
+    def test_sanitized_status_without_key(self):
+        err = RuntimeError('HTTP 503: secret-key https://example.org/?key=private')
+        err.code = 503
+        with patch.dict(os.environ, {'GEMINI_API_KEY': 'secret-key'}):
+            details = generation.safe_error(err)
+        self.assertEqual(details['http_status'], 503)
+        self.assertNotIn('secret-key', details['message'])
+        self.assertNotIn('private', details['message'])
+
+    def test_provider_only_pause_and_resume_does_not_touch_gpt(self):
+        row = source()
+        task = {'task_id': 'SYNTHETIC1', 'provider': 'claude', 'behaviors': ['answer'],
+                'family_kind': 'standalone', 'source': row}
+        other = task | {'task_id': 'SYNTHETIC2'}
+        item = fixture() | {'supporting_evidence': row['Text']}
+        first = {'text': json.dumps({'questions': [item]}), 'model': 'mock-claude'}
+        second = {'text': json.dumps({'questions': [item | {'question': 'Second synthetic fixture?'}]}), 'model': 'mock-claude'}
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            gpt = root/'gpt.raw.jsonl'; gpt.write_text('UNCHANGED')
+            args = SimpleNamespace(output=root/'claude.jsonl', total_questions=50, seed=2026,
+                                   max_tokens=8192, resume=False, max_new_tasks=1)
+            with patch.object(generation, 'make_clients', return_value={'claude': Mock()}) as clients:
+                with patch.object(generation, 'call_llm', return_value=first) as call:
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.execute([task, other], {'claude': 'mock-claude'}, args)
+                    call.assert_called_once()
+                clients.assert_called_once_with(('claude',))
+            self.assertFalse(args.output.exists())
+            args.resume = True; args.max_new_tasks = None
+            with patch.object(generation, 'make_clients', return_value={'claude': Mock()}):
+                with patch.object(generation, 'call_llm', return_value=second) as call:
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.execute([task, other], {'claude': 'mock-claude'}, args)
+                    call.assert_called_once()
+            self.assertEqual(len(generation.read_jsonl(args.output)), 2)
+            self.assertEqual(gpt.read_text(), 'UNCHANGED')
+
+
 if __name__ == '__main__':
     unittest.main()

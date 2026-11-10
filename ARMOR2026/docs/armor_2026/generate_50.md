@@ -34,7 +34,7 @@ Fill in your three API keys and three exact model IDs in `.env`, then save and c
 - [Google AI Studio API keys](https://aistudio.google.com/apikey)
 - [Claude API console](https://platform.claude.com/)
 
-Gemini now uses `google-genai`, not the old `google-generativeai` SDK. All provider imports and client creation are delayed until an explicit live run. No credentials are printed or stored in the run manifest.
+Gemini now uses `google-genai`, not the old `google-generativeai` SDK. Provider imports and client creation are delayed until an explicit live run, and only selected providers are initialized. No credentials are printed or stored in the run manifest.
 
 ## Preview the plan without generating anything
 
@@ -50,10 +50,10 @@ python ARMOR2026\scripts\generate_mcqs_multi_llm.py --total_questions 50 --gpt-m
 
 Replace those three placeholders with the exact provider IDs you want. Without `--run`, this command makes no API calls. Adding `--run` generates the planned 17 GPT, 17 Gemini, and 16 Claude questions using those IDs. These flags choose IDs within the three supported providers; they do not add providers or change allocation.
 
-The effective IDs are saved in the run manifest. A different model ID still requires a new output path rather than resuming an incompatible checkpoint. This script update also changes the script hash checked by old three-provider manifests; it does not migrate or modify those checkpoints. Keep earlier saved results. To work on Gemini without repeating GPT, use the separate [Gemini-only workflow](gemini_only.md), whose `--model` option overrides only Gemini:
+The effective IDs are saved in the run manifest. A different model ID still requires a new output path rather than resuming an incompatible checkpoint. Updates to the script change the script hash checked by older manifests; this version does not migrate or modify those checkpoints. Keep earlier saved results. To work on Gemini without repeating GPT, use the same script with `--provider gemini --model` (see [provider selection](provider_selection.md)):
 
 ```powershell
-python ARMOR2026\scripts\generate_gemini_only.py --model YOUR_GEMINI_MODEL_ID --probe --run
+python ARMOR2026\scripts\generate_mcqs_multi_llm.py --provider gemini --model YOUR_GEMINI_MODEL_ID --probe --run
 ```
 
 That sends one small paid diagnostic request and does not generate benchmark questions. Run it without `--run` for a preview only.
@@ -70,7 +70,7 @@ This prints allocation and configuration status only; no questions, run files, o
 python scripts\generate_mcqs_multi_llm.py --total_questions 50 --run
 ```
 
-This is the paid command. The default output is `results/armor_2026/runs/nato_50_draft.jsonl`, with a manifest and raw checkpoint beside it. No such question file is included in this commit. With default settings there are 20 generation tasks/API requests: 15 requests for three related questions and five requests for one question. SDK retries are disabled. Do not run two processes against the same output path.
+This is the paid command for all three providers. The default output is `results/armor_2026/runs/nato_50_draft.jsonl`, with a manifest and raw checkpoint beside it. No such question file is included in this commit. With default settings there are 20 generation tasks/API requests: 15 requests for three related questions and five requests for one question. SDK retries are disabled. Do not run two processes against the same output path.
 
 Every response must match the requested count, three-option schema, expected behavior, exact evidence quotation, and fact metadata. Duplicate stems are rejected. These are structural checks; they cannot establish legal correctness, independent item quality, or whether a model obeyed a national reservation.
 
@@ -91,3 +91,7 @@ python -m unittest discover -s tests -p test_generation_plan.py -v
 ```
 
 Tests use synthetic fixtures and mocked API responses only. They do not generate a benchmark dataset or call providers.
+
+## Select one provider
+
+Use `--provider claude`, `--provider gemini`, or `--provider gpt` to run only that provider. With the default total plan of 50, these select 16, 17, or 17 questions respectively; the total is not reallocated. Omit the flag or use `--provider all` for all 50. A selected provider needs only its own key and model ID. Its default output uses a separate name, such as `nato_claude_draft.jsonl`. See [provider commands and probes](provider_selection.md).

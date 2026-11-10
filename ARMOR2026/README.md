@@ -2,9 +2,9 @@
 
 All 2026 work is consolidated here: `armor2026/` contains the earlier paired-format pipeline, `scripts/` contains the three-provider MCQ generator, `data/nato/` contains 30 source snippets and provenance, `input_policy_documents/` contains the NATO PDF, and `paper/` contains the current LaTeX draft copied from the paper repository.
 
-## Troubleshoot Gemini without rerunning GPT
+## One generation script for all providers
 
-Use the [Gemini-only diagnostic and generation commands](docs/armor_2026/gemini_only.md). The separate script can make one small probe request, display a sanitized HTTP error, and generate only Gemini's 17-question share. The original generator and existing checkpoints remain unchanged.
+Use [provider selection and diagnostic commands](docs/armor_2026/provider_selection.md). `scripts/generate_mcqs_multi_llm.py` supports `--provider gpt`, `--provider gemini`, `--provider claude`, or `--provider all`, along with `--model` for one selected provider and `--probe` for a small API test. Provider-only runs have separate output files and do not repeat other providers. The former Gemini-only entry point has been consolidated into this script; saved run files are not moved or deleted.
 
 ## Prepare the 50-question pilot
 
