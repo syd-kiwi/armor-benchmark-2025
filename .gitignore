@@ -1,3 +1,12 @@
 armor_env
 question_generation_pipeline
 data_analysis_&_outputs
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+results/armor_2026/runs/
+dataset/armor_2026/pages.jsonl
+dataset/armor_2026/*.raw.jsonl

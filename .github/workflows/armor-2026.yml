@@ -1,0 +1,19 @@
+name: ARMOR 2026 offline checks
+on:
+  push:
+    branches: [armor-2026]
+  pull_request:
+    branches: [armor-2026]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements-2026.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python -m armor2026 extract --pages /tmp/armor-pages.jsonl --output /tmp/armor-passages.jsonl
