@@ -1,0 +1,27 @@
+{
+  "doc_source": "nato_ajp39_2021",
+  "title": "Allied Joint Doctrine for Joint Targeting",
+  "publisher": "NATO Standardization Office",
+  "document_id": "AJP-3.9",
+  "edition": "Edition B, Version 1, November 2021",
+  "path": "input_policy_documents/AJP-3.9_EDB_V1_E.pdf",
+  "url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1033306/AJP-3.9_EDB_V1_E.pdf",
+  "landing_page": "https://www.gov.uk/government/publications/allied-joint-doctrine-for-joint-targeting-ajp-39a",
+  "sha256": "cbc1d451bd17030f53c92edb99591ddaffdc6e044d386eb57ebd2a08f46efb50",
+  "pdf_pages": 126,
+  "retrieved_date": "2026-11-10",
+  "applicable_framework": "NATO AJP-3.9, Edition B, Version 1 (November 2021), with relevant national reservations explicitly identified",
+  "reservation_pdf_pages": [
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "notes": [
+    "This is a fixed source edition, not a claim that it is the newest NATO publication.",
+    "Read all recorded national reservations before approving passages or questions. The document notes the reservation list may not be complete.",
+    "PDF page numbers are one-based file positions; printed page labels differ.",
+    "Original document copyright: NATO/OTAN. Preserve source attribution and original notices."
+  ]
+}

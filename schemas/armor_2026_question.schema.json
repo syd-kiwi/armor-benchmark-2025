@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ARMOR 2026 question",
+  "type": "object",
+  "required": ["qid", "scenario_id", "span_id", "doc_source", "category", "generator_model", "question", "question_format", "reference_answer", "supporting_evidence", "source_passage", "source_edition", "source_paragraph", "source_pdf_pages", "source_sha256", "applicable_framework", "national_reservation", "reservation_handling", "expected_behavior", "review_status", "reviewer", "split", "generation_prompt_sha256"],
+  "properties": {
+    "qid": {"type": "string", "minLength": 1},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "span_id": {"type": "string", "minLength": 1},
+    "doc_source": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "generator_model": {"type": "string", "minLength": 1},
+    "question": {"type": "string", "minLength": 1},
+    "question_format": {"enum": ["mcq", "open_response"]},
+    "option_A": {"type": "string", "minLength": 1},
+    "option_B": {"type": "string", "minLength": 1},
+    "option_C": {"type": "string", "minLength": 1},
+    "option_D": {"type": "string", "minLength": 1},
+    "correct_option": {"enum": ["A", "B", "C", "D"]},
+    "reference_answer": {"type": "string", "minLength": 1},
+    "supporting_evidence": {"type": "string", "minLength": 1},
+    "source_passage": {"type": "string", "minLength": 1},
+    "source_edition": {"type": "string", "minLength": 1},
+    "source_paragraph": {"type": "string", "minLength": 1},
+    "source_pdf_pages": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 1},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "applicable_framework": {"type": "string", "minLength": 1},
+    "national_reservation": {"type": "string", "minLength": 1},
+    "reservation_handling": {"type": "string", "minLength": 1},
+    "expected_behavior": {"enum": ["answer", "reject_conduct", "clarify"]},
+    "review_status": {"enum": ["draft", "approved", "rejected"]},
+    "reviewer": {"type": "string"},
+    "split": {"enum": ["pilot", "development", "test"]},
+    "generation_prompt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  },
+  "allOf": [
+    {"if": {"properties": {"question_format": {"const": "mcq"}}}, "then": {"required": ["option_A", "option_B", "option_C", "correct_option"]}},
+    {"if": {"properties": {"review_status": {"const": "approved"}}}, "then": {"properties": {"reviewer": {"type": "string", "pattern": "\\S"}}}}
+  ]
+}

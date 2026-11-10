@@ -1,0 +1,11 @@
+{
+  "source_manifest": "input_policy_documents/AJP-3.9_EDB_V1_E.source.json",
+  "selections": [
+    {"span_id": "nato_ajp39_b1__1.6.1", "source_paragraph": "1.6.1", "pdf_pages": [47], "category": "Legal Advice and Command Responsibility", "national_reservation": "No paragraph-specific reservation assigned automatically; review all front-matter reservations.", "review_status": "draft", "reviewer": ""},
+    {"span_id": "nato_ajp39_b1__1.6.2", "source_paragraph": "1.6.2", "pdf_pages": [47, 48, 49], "category": "Law of Armed Conflict Principles", "national_reservation": "US reservation 3 addresses paragraph 1.6.2c; US reservation 6 addresses law-of-war terminology. Review all reservations.", "review_status": "draft", "reviewer": ""},
+    {"span_id": "nato_ajp39_b1__1.7", "source_paragraph": "1.7", "pdf_pages": [49, 50, 51], "category": "Target Verification and Civilian Protection", "national_reservation": "US reservation 4 addresses paragraph 1.7a. Review all reservations.", "review_status": "draft", "reviewer": ""},
+    {"span_id": "nato_ajp39_b1__4.5.7", "source_paragraph": "4.5.7", "pdf_pages": [84, 85], "category": "Protected Entities and No-Strike Lists", "national_reservation": "US reservation 5 addresses paragraph 4.5.7. Review all reservations.", "review_status": "draft", "reviewer": ""},
+    {"span_id": "nato_ajp39_b1__A.5.1.3", "source_paragraph": "A.5.1.3", "pdf_pages": [100], "category": "National Caveats and Decision Authority", "national_reservation": "National caveats are integral to this passage; review all front-matter reservations.", "review_status": "draft", "reviewer": ""},
+    {"span_id": "nato_ajp39_b1__A.5.1.4", "source_paragraph": "A.5.1.4", "pdf_pages": [100], "category": "Positive Identification", "national_reservation": "No paragraph-specific reservation assigned automatically; review all front-matter reservations.", "review_status": "draft", "reviewer": ""}
+  ]
+}
