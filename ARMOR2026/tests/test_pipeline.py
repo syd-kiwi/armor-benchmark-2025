@@ -65,7 +65,7 @@ class DatasetTests(unittest.TestCase):
         self.assertTrue(validate_questions(rows, approved=True))
 
     def test_legacy_dataset_untouched_and_readable(self):
-        rows = read_rows(ROOT / "dataset/questions_final_519.jsonl")
+        rows = read_rows(ROOT.parent / "dataset/questions_final_519.jsonl")
         self.assertEqual(len(rows), 519)
 
 

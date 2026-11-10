@@ -7,6 +7,12 @@ __pycache__/
 .env
 .env.*
 !.env.example
-results/armor_2026/runs/
-dataset/armor_2026/pages.jsonl
-dataset/armor_2026/*.raw.jsonl
+ARMOR2026/results/armor_2026/runs/
+ARMOR2026/dataset/armor_2026/pages.jsonl
+ARMOR2026/dataset/armor_2026/*.raw.jsonl
+
+ARMOR2026/paper/*.aux
+ARMOR2026/paper/*.log
+ARMOR2026/paper/*.bbl
+ARMOR2026/paper/*.blg
+ARMOR2026/paper/*.out

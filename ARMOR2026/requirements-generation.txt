@@ -1,0 +1,5 @@
+# Separate from the CPU-only analysis/extraction requirements.
+openai>=1.66.0,<3
+google-genai>=1.30.0,<3
+anthropic>=0.49.0,<1
+python-dotenv>=1.0.1,<2
