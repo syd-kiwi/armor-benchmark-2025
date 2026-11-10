@@ -1,0 +1,46 @@
+\section{Introduction}
+
+Large language models (LLMs) can produce confident recommendations even when a scenario does not contain the facts needed to support them. In military decision support, a useful response depends on both the applicable provision and the information available. A model may need to answer a question, explain that proposed conduct is prohibited, or identify a missing fact before reaching a conclusion. Evaluating these distinctions requires more than measuring whether a model answers or refuses.
+
+ARMOR 2025 evaluated doctrinal accuracy and refusal using 519 multiple choice questions grounded in the \textit{Department of Defense Law of War Manual}, a U.S. Marine Corps \textit{Law of War and Rules of Engagement} training document, and the \textit{Joint Ethics Regulation}~\cite{johns2026armor2025manuscript}. ARMOR 2026 expands this benchmark along two dimensions: broader doctrinal coverage and deeper evaluation of model behavior. The expansion asks whether models recognize when the supplied evidence justifies a conclusion. A correct response to a complete question does not establish that a model will notice when an essential fact is removed.
+
+We propose \sysname as an expanded military safety benchmark for evaluating response selection and doctrinal justification using supplied source provisions. The planned collection retains the source documents used in ARMOR 2025~\cite{dod2023lawofwar,usmc_lawofwar_roengage,dod55007r} and adds NATO's \textit{Allied Joint Doctrine for Joint Targeting}, AJP-3.9, Edition B, Version 1, November 2021~\cite{nato2021ajp39}. These sources have different purposes and scopes. Each item will identify its governing source and edition. We will not combine provisions into a single authority or assume that U.S. and NATO guidance conflict. The supplied provision defines the evaluation context; performance on these items does not establish compliance with every rule that could apply in an actual operation.
+
+Answerability and uncertainty have established evaluation traditions. SQuAD 2.0 tests whether a passage supports an answer~\cite{rajpurkar2018squad2}, while AbstentionBench examines abstention across several forms of unanswerability~\cite{kirichenko2025abstentionbench}. Military evaluation also includes WARBENCH, which assesses legal compliance and performance under information degradation~\cite{li2026warbench}. These studies motivate an explicit benchmark of when scenario facts support a doctrinal conclusion. ARMOR 2026 will evaluate both the selected response and its justification, rather than treating every non-answer as the same outcome.
+
+\subsection{Expected Response Behaviors}
+
+The study distinguishes three expected behaviors:
+\begin{enumerate}
+    \item \textbf{Answer:} The supplied provision and scenario contain enough information to reach a supported conclusion that does not reject the proposed conduct.
+    \item \textbf{Reject the proposed conduct:} The supplied provision, applied to the stated facts, prohibits the proposed action. The model should explain the applicable prohibition.
+    \item \textbf{Request clarification or answer conditionally:} Essential information is missing. The model should identify the missing fact or explain how the conclusion depends on it.
+\end{enumerate}
+
+These categories describe the expected disposition of a response, rather than whether the model produces text. Rejecting prohibited conduct is a substantive doctrinal answer. A generic refusal to discuss military topics is a separate observed outcome. An unsupported conclusion or an irrelevant clarification request will not receive credit merely because it resembles one of the expected behaviors.
+
+An item will receive the third label only when the omitted fact could change the conclusion and no independently decisive prohibition is already established. A conditional answer must name the unresolved condition and avoid presenting an unconditional recommendation. This distinction prevents missing information from being treated as permission and prevents every incomplete description from automatically requiring clarification.
+
+\subsection{Research Questions}
+
+The main research question is: \textit{Can LLMs determine when military doctrine and scenario information support an answer, require rejection of proposed conduct, or require clarification?}
+
+We address three supporting questions:
+\begin{itemize}
+    \item \textbf{RQ1:} How accurately do LLMs distinguish among answering, rejecting prohibited conduct, and requesting clarification?
+    \item \textbf{RQ2:} How does removing or changing essential scenario information affect model responses?
+    \item \textbf{RQ3:} How well do LLMs justify their responses using the supplied doctrine?
+\end{itemize}
+
+For RQ1, the planned evaluation will report performance by expected behavior and confusion among response types, with generic refusals and other invalid responses recorded separately. For RQ2, matched scenario groups will vary decisive facts while retaining the same source provision and underlying situation where feasible. Not every provision supports all three variants; groups will be retained only when each expected response is justified. For RQ3, reviewers will assess whether the explanation applies the supplied provision correctly, identifies essential missing facts, and avoids unsupported rules. We assess the justification expressed in the response, rather than claiming access to a model's internal reasoning.
+
+\subsection{Planned Contributions}
+
+The proposed study has three intended contributions:
+\begin{itemize}
+    \item An expanded doctrine grounded benchmark combining additional source coverage with three expected response behaviors: supported answers, rejection of prohibited conduct, and clarification or conditional answers.
+    \item Matched scenario groups with source passages, expected behaviors, and reference justifications to test sensitivity to decisive facts.
+    \item An evaluation protocol that separates response selection from the correctness of the stated justification.
+\end{itemize}
+
+Dataset size, model selection, and empirical findings will be reported after construction and evaluation. Source specific analyses will examine performance within the selected documents. Direct comparisons between U.S. and NATO provisions will be limited to cases where their scope supports a meaningful comparison.

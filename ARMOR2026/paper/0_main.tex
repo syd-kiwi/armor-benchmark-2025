@@ -1,0 +1,96 @@
+\documentclass[conference]{IEEEtran}
+
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage[noend]{algorithmic}
+\usepackage{xspace}
+\usepackage{tabularx}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{parskip}
+\usepackage{url}
+\usepackage{graphicx} 
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\setlength{\parindent}{1em}
+
+\newcommand{\sysname}{\textsf{ARMOR 2026}\xspace}
+
+\newtcolorbox{promptbox}[1][]{%
+  title=Prompt,
+  colback=gray!5!white,
+  colframe=gray!50!black,
+  sharp corners,
+  boxrule=0.5pt,
+  enhanced,
+  breakable,
+  fonttitle=\bfseries,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  #1
+}
+
+\newtcolorbox{answerbox}[1][]{%
+  title=Reference Answer,
+  colback=blue!3!white,
+  colframe=blue!50!black,
+  sharp corners,
+  boxrule=0.5pt,
+  enhanced,
+  breakable,
+  fonttitle=\bfseries,
+  left=5pt,
+  right=5pt,
+  top=5pt,
+  bottom=5pt,
+  #1
+}
+
+\begin{document}
+
+% Working title; final title to be selected.
+\title{\sysname: Evaluating Doctrine Grounding and Response Selection in Military Scenarios}
+\author{\IEEEauthorblockN{
+Sydney Johns, 
+Heng Jin, 
+Chaoyu Zhang,
+Y. Thomas Hou,
+Wenjing Lou}
+\IEEEauthorblockA{{Virginia Polytechnic Institute and State University, Virginia, United States} \\
+Email: sydneyjohns@vt.edu, hengj@vt.edu, chaoyu@vt.edu, hou@vt.edu, wjlou@vt.edu}
+}
+
+
+\maketitle
+
+
+\begin{abstract}
+Large language models (LLMs) used for military decision support must do more than select a plausible answer. They must recognize when the supplied doctrine and scenario support a conclusion, when a provision prohibits proposed conduct, and when essential information is missing. We propose \sysname, an expanded military safety benchmark building on ARMOR 2025 that evaluates these three response behaviors through scenarios grounded in supplied source provisions. The expansion broadens both doctrinal coverage and the response behaviors evaluated. The planned source collection combines the U.S. documents used in the earlier benchmark with NATO's Allied Joint Doctrine for Joint Targeting, AJP-3.9, Edition B, Version 1. Matched scenario variants will change or remove decisive facts while preserving the underlying situation where feasible. The evaluation will measure response selection, sensitivity to changes in essential information, and the quality of doctrinal justification. A rejection of prohibited conduct will count as a substantive answer, while a generic refusal to discuss the topic will be recorded separately. This draft presents the research questions and proposed study design; dataset construction and model evaluation remain future work.
+\end{abstract}
+\begin{IEEEkeywords}
+Large language models, military decision support, safety evaluation, doctrine grounding, benchmarking, response selection, clarification.
+\end{IEEEkeywords}
+
+
+
+
+\input{1_Introduction.tex}
+\input{2_RelatedWork}
+% ARMOR 2026 working draft: the following files still describe ARMOR 2025.
+% Restore each input after its content has been revised for the new study.
+% \input{3_Methodology.tex}
+% \input{4_Evaluation.tex}
+% \input{5_Discussion.tex}
+% \input{6_Conclusion.tex}
+% \input{7_ACKNOWLEDGMENT}
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\end{document}

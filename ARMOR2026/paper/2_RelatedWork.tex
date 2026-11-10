@@ -1,0 +1,37 @@
+\section{Related Work}\label{sec:related-work}
+
+\subsection{Policy and Legal Safety Evaluation}
+
+AIR-Bench 2024 organizes safety evaluation around risks derived from government regulations and company policies~\cite{zeng2024airbench}. This supports the use of explicit policy sources when defining evaluation criteria. SafeLawBench evaluates LLM safety using legal standards and includes assessments of refusal behavior and reasoning stability~\cite{cao_safelawbench_2025}. These studies motivate source based evaluation, but the present study asks a narrower question: whether a model selects a response justified by a supplied military provision and the available scenario facts. We do not assume that a single answer or refusal rate captures all appropriate behaviors.
+
+\subsection{Unnecessary Refusal and Clarification}
+
+XSTest evaluates exaggerated safety behavior using safe prompts and unsafe contrasts~\cite{rottger2024xstest}. It motivates measuring unnecessary refusals alongside failures to reject inappropriate requests. In \sysname, however, rejecting proposed conduct is evaluated as an application of the supplied provision. A model that explains a prohibition has provided substantive assistance; a generic refusal supplies no comparable doctrinal justification. These outcomes therefore require separate annotations.
+
+CLAMBER evaluates whether LLMs identify ambiguous information needs and produce useful clarification questions~\cite{zhang2024clamber}. This work motivates assessing clarification quality in addition to whether a question is asked. Our proposed variants focus on missing facts that could change the conclusion under a specified provision. A relevant clarification request must identify such a fact. A conditional answer is also acceptable when it explicitly states how the unresolved condition affects the conclusion. This design evaluates the sufficiency of scenario information without assuming that every ambiguity requires the model to stop answering.
+
+\subsection{Answerability and Evidence Support}
+
+SQuAD 2.0 combines answerable questions with questions whose answers are not supported by the accompanying paragraph~\cite{rajpurkar2018squad2}. It establishes the importance of evaluating whether an answer is available in the supplied context. AbstentionBench broadens this concern to unknown answers, underspecification, false premises, subjective interpretations, and outdated information~\cite{kirichenko2025abstentionbench}. These benchmarks motivate testing whether models recognize limitations in the available evidence. ARMOR 2026 will distinguish missing information from an explicit prohibition, since both can prevent endorsement of conduct but call for different explanations.
+
+ALCE evaluates generated answers along dimensions including correctness and citation quality~\cite{gao2023alce}. This motivates checking whether a stated justification is actually supported by its source. The planned ARMOR evaluation will inspect the connection between the supplied provision, the scenario facts, and the conclusion. Including a source name alone will not establish that the provision supports the response.
+
+\subsection{Military Knowledge and Doctrine Grounding}
+
+Ruiz and Sell introduce MilBench as an extensible framework for evaluating Army domain knowledge using tasks derived from doctrine and assessments~\cite{ruiz_fine-tuning_2024}. Knowledge evaluation is relevant to military language models, while the present study focuses on how a model applies a supplied provision when essential facts change.
+
+WARBENCH evaluates military decision making through historical scenarios and stress tests covering legal compliance, edge deployment, information degradation, and explicit reasoning~\cite{li2026warbench}. Its treatment of incomplete information directly overlaps with the motivation for RQ2. ARMOR 2026 will focus on the expected response to a supplied provision and the specific fact changes that justify answering, rejecting conduct, or seeking clarification. This scope complements broader tactical and deployment evaluation; it does not establish that earlier military benchmarks ignore uncertainty or legal constraints.
+
+Drinkall evaluates legal and moral risk through multi-turn simulated conflict, including measures of targeting behavior and simulated civilian harm~\cite{drinkall2025redlines}. This provides a complementary behavioral perspective. ARMOR 2026 will use controlled scenario variants to examine stated doctrinal conclusions rather than infer compliance from actions taken within a simulated conflict.
+
+ARMOR 2025 provides the immediate foundation for this work through its doctrinally grounded multiple choice questions and evaluation of accuracy and refusal~\cite{johns2026armor2025manuscript}. \sysname proposes a different evaluation unit: a group of related scenarios with changes that alter the expected response. This enables examination of whether a model answers when justified, rejects prohibited conduct, and recognizes when a conclusion depends on missing information.
+
+The planned addition of AJP-3.9 expands the source collection to NATO joint targeting guidance~\cite{nato2021ajp39}. The publication addresses the planning, conduct, and assessment of joint targeting. It is treated as an item specific source, rather than as interchangeable with U.S. legal manuals, training materials, or ethics regulations. The study will preserve source attribution and avoid interpreting differences in document purpose as evidence of doctrinal disagreement.
+
+\subsection{Behavioral Testing and Scenario Variants}
+
+CheckList introduces behavioral testing for NLP models using capabilities and test types that expose failures hidden by aggregate accuracy~\cite{ribeiro2020checklist}. This motivates the use of related test cases with explicit expectations. ARMOR 2026 will use matched variants to test whether models respond to decisive facts, while preserving source attribution and recording why each variant should change the expected response. The benchmark expansion therefore includes a new test structure as well as additional documents.
+
+\subsection{Position of the Expanded Benchmark}
+
+These research areas address complementary aspects of model behavior: policy based criteria, legal safety, unnecessary refusal, clarification, and military knowledge. \sysname expands the ARMOR benchmark by bringing these concerns into a controlled evaluation of supplied military provisions. The expansion adds source coverage and scenario groups that measure response selection, sensitivity to decisive facts, and the correctness of expressed justifications within the same scenario groups. Whether this design reveals consistent differences across models or source documents remains an empirical question.
