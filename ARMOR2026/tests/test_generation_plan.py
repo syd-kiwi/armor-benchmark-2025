@@ -74,6 +74,40 @@ class PlanTests(unittest.TestCase):
                 clients.assert_not_called()
 
 
+class ModelOptionTests(unittest.TestCase):
+    def test_cli_overrides_environment_and_preserves_unspecified_models(self):
+        with patch.dict(os.environ, {'OPENAI_MODEL': 'env-gpt', 'GEMINI_MODEL': 'env-gemini',
+                                     'ANTHROPIC_MODEL': 'env-claude'}, clear=True):
+            self.assertEqual(generation.configured_models({'gemini': ' cli-gemini '}),
+                             {'gpt': 'env-gpt', 'gemini': 'cli-gemini', 'claude': 'env-claude'})
+            self.assertEqual(generation.configured_models({'gemini': ''})['gemini'], '')
+
+    def test_all_cli_model_ids_work_without_model_environment_variables(self):
+        env = {'OPENAI_API_KEY': 'fake', 'GEMINI_API_KEY': 'fake', 'ANTHROPIC_API_KEY': 'fake'}
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, env, clear=True):
+            with patch.object(generation, 'execute') as execute:
+                with patch('sys.argv', ['generator', '--run', '--env_file', str(Path(tmp)/'absent'),
+                                        '--gpt-model', 'cli-gpt', '--gemini_model', 'cli-gemini',
+                                        '--claude-model', 'cli-claude']):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.main()
+                execute.assert_called_once()
+                self.assertEqual(execute.call_args.args[1],
+                                 {'gpt': 'cli-gpt', 'gemini': 'cli-gemini', 'claude': 'cli-claude'})
+
+    def test_model_override_preview_is_offline(self):
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {}, clear=True):
+            with patch.object(generation, 'execute') as execute, patch.object(generation, 'make_clients') as clients:
+                with patch('sys.argv', ['generator', '--env_file', str(Path(tmp)/'absent'),
+                                        '--gemini-model', 'preview-gemini']):
+                    output = io.StringIO()
+                    with contextlib.redirect_stdout(output):
+                        generation.main()
+                self.assertIn('gemini: model preview-gemini', output.getvalue())
+                execute.assert_not_called()
+                clients.assert_not_called()
+
+
 class ValidationTests(unittest.TestCase):
     def task(self, behavior='answer'):
         return {'behaviors': [behavior], 'source': source()}
