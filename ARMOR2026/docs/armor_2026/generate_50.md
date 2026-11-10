@@ -38,6 +38,26 @@ Gemini now uses `google-genai`, not the old `google-generativeai` SDK. All provi
 
 ## Preview the plan without generating anything
 
+### Choose model IDs on the command line
+
+You can override any or all model IDs without changing `.env`. The options are `--gpt-model`, `--gemini-model`, and `--claude-model` (underscore spellings are also accepted). IDs not supplied on the command line keep their environment or `.env` settings. Keys still come from environment variables or `.env`.
+
+From the repository root in PowerShell, preview your chosen IDs:
+
+```powershell
+python ARMOR2026\scripts\generate_mcqs_multi_llm.py --total_questions 50 --gpt-model YOUR_OPENAI_MODEL_ID --gemini-model YOUR_GEMINI_MODEL_ID --claude-model YOUR_CLAUDE_MODEL_ID
+```
+
+Replace those three placeholders with the exact provider IDs you want. Without `--run`, this command makes no API calls. Adding `--run` generates the planned 17 GPT, 17 Gemini, and 16 Claude questions using those IDs. These flags choose IDs within the three supported providers; they do not add providers or change allocation.
+
+The effective IDs are saved in the run manifest. A different model ID still requires a new output path rather than resuming an incompatible checkpoint. This script update also changes the script hash checked by old three-provider manifests; it does not migrate or modify those checkpoints. Keep earlier saved results. To work on Gemini without repeating GPT, use the separate [Gemini-only workflow](gemini_only.md), whose `--model` option overrides only Gemini:
+
+```powershell
+python ARMOR2026\scripts\generate_gemini_only.py --model YOUR_GEMINI_MODEL_ID --probe --run
+```
+
+That sends one small paid diagnostic request and does not generate benchmark questions. Run it without `--run` for a preview only.
+
 ```bat
 python scripts\generate_mcqs_multi_llm.py --total_questions 50
 ```

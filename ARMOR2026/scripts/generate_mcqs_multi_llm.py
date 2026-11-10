@@ -176,8 +176,11 @@ def parse_questions(text, task, existing_stems=()):
     return items
 
 
-def configured_models():
-    return {p: os.environ.get(MODEL_ENV[p], "").strip() for p in PROVIDERS}
+def configured_models(overrides=None):
+    """Explicit CLI IDs override environment variables and .env values."""
+    overrides = overrides or {}
+    return {p: (overrides[p] if overrides.get(p) is not None
+                else os.environ.get(MODEL_ENV[p], "")).strip() for p in PROVIDERS}
 
 
 def make_clients():
@@ -315,6 +318,12 @@ def main():
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--max_tokens", type=int, default=8192)
     parser.add_argument("--env_file", type=Path, default=ROOT / ".env")
+    parser.add_argument("--gpt-model", "--gpt_model", dest="gpt_model",
+                        help="OpenAI model ID; overrides OPENAI_MODEL")
+    parser.add_argument("--gemini-model", "--gemini_model", dest="gemini_model",
+                        help="Gemini model ID; overrides GEMINI_MODEL")
+    parser.add_argument("--claude-model", "--claude_model", dest="claude_model",
+                        help="Claude model ID; overrides ANTHROPIC_MODEL")
     parser.add_argument("--run", action="store_true", help="Make paid calls; without this flag show plan only")
     parser.add_argument("--resume", action="store_true", help="Skip saved successful tasks and retry incomplete tasks")
     args = parser.parse_args()
@@ -326,7 +335,8 @@ def main():
             load_dotenv(args.env_file, override=False)
         rows = load_snippets(args.input_csv, args.provenance_csv)
         tasks = plan_tasks(rows, args.total_questions, args.seed)
-        models = configured_models()
+        models = configured_models({"gpt": args.gpt_model, "gemini": args.gemini_model,
+                                    "claude": args.claude_model})
         print("Planned questions by provider:", quotas(args.total_questions))
         print("Planned expected behaviors:", dict(Counter(b for t in tasks for b in t["behaviors"])))
         print("Matched triples:", sum(t["family_kind"] == "matched_triple" for t in tasks))
@@ -336,8 +346,10 @@ def main():
         if not args.run:
             print("Plan only. No API calls, questions, or run files created. Add --run when ready.")
             return
-        missing = [name for name in (*KEY_ENV.values(), *MODEL_ENV.values())
-                   if not os.environ.get(name, "").strip() or os.environ[name].startswith("YOUR_")]
+        missing = [name for name in KEY_ENV.values()
+                   if not os.environ.get(name, "").strip() or os.environ[name].strip().startswith("YOUR_")]
+        missing += [MODEL_ENV[p] + " (or its model flag)" for p in PROVIDERS
+                    if not models[p] or models[p].startswith("YOUR_")]
         if missing:
             raise ValueError("Fill in .env or environment variables: " + ", ".join(missing))
         execute(tasks, models, args)
