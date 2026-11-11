@@ -239,7 +239,7 @@ class ProviderSelectionTests(unittest.TestCase):
                 self.assertEqual({t['provider'] for t in tasks}, {'claude'})
                 self.assertEqual(sum(len(t['behaviors']) for t in tasks), 16)
                 self.assertEqual(models, {'claude': 'mock-claude'})
-                self.assertEqual(args.output.name, 'nato_claude_v4_draft.jsonl')
+                self.assertEqual(args.output.name, 'nato_claude_v5_draft.jsonl')
 
     def test_probe_only_selected_provider_and_no_files(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
@@ -406,14 +406,15 @@ class V4GuardTests(unittest.TestCase):
     def test_prompt_contains_neutral_context_and_counterfactual_instructions(self):
         task, _ = self.family()
         prompt = generation.build_prompt(task)
-        for phrase in ['Advisor availability is not the same', 'No shared fact contradicts', 'invariant doctrine-recall',
-                       'actual legal-advisor', 'never their provisional letters']:
+        for phrase in ['Advisor availability is not the same', 'MANDATORY DELETION TEST', 'MANDATORY SUBSTITUTION TEST',
+                       'second option', 'at most two words', 'Do not invent']:
             self.assertIn(phrase, prompt)
 
 
 class LengthRecoveryTests(unittest.TestCase):
     family = SharedScenarioTests.family
 
+    @patch.object(generation, "PROMPT_VERSION", "armor2026-three-provider-v4")
     def test_known_v4_checkpoint_recovers_length_failure_without_api_call(self):
         task, items = self.family()
         for c, count in zip('ABC', [19, 15, 13]):
@@ -457,6 +458,7 @@ class LengthRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Evidence'):
             generation.recover_length_failure([entry], task, [])
 
+    @patch.object(generation, "PROMPT_VERSION", "armor2026-three-provider-v4")
     def test_upgrade_cannot_change_model_or_plan(self):
         with tempfile.TemporaryDirectory() as tmp:
             saved = {'prompt_version': generation.PROMPT_VERSION, 'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES)),
@@ -466,6 +468,46 @@ class LengthRecoveryTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'cannot change'):
                     generation.upgrade_checkpoint(Path(tmp)/'manifest.json', saved, current, [], [])
             self.assertEqual(list(Path(tmp).iterdir()), [])
+
+
+class V5PromptTests(unittest.TestCase):
+    family = SharedScenarioTests.family
+
+    def test_new_prompt_cannot_upgrade_v4_checkpoint(self):
+        saved = {'prompt_version': 'armor2026-three-provider-v4',
+                 'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(ValueError, 'Prompt v5 requires a new output path'):
+                generation.upgrade_checkpoint(Path(tmp)/'manifest.json', saved, saved, [], [])
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_all_provider_adapters_receive_generation_instructions(self):
+        task, _ = self.family()
+        prompt = generation.build_prompt(task)
+        for provider in generation.PROVIDERS:
+            client = Mock()
+            if provider == 'gpt':
+                client.chat.completions.create.return_value = SimpleNamespace(
+                    choices=[SimpleNamespace(finish_reason='stop', message=SimpleNamespace(content='{}', refusal=None))],
+                    model='mock', id='mock', usage=None)
+            elif provider == 'gemini':
+                client.models.generate_content.return_value = SimpleNamespace(
+                    candidates=[SimpleNamespace(finish_reason='STOP')], text='{}', usage_metadata=None)
+            else:
+                client.messages.create.return_value = SimpleNamespace(stop_reason='end_turn',
+                    content=[SimpleNamespace(type='text', text='{}')], model='mock', id='mock',
+                    usage=SimpleNamespace(model_dump=lambda: {}))
+            generation.call_llm(client, provider, 'mock', prompt, 100)
+            if provider == 'gpt':
+                messages = client.chat.completions.create.call_args.kwargs['messages']
+                self.assertEqual(messages[0]['content'], generation.SYSTEM)
+                self.assertEqual(messages[1]['content'], prompt)
+            elif provider == 'gemini':
+                self.assertEqual(client.models.generate_content.call_args.kwargs['contents'], generation.SYSTEM + '\n' + prompt)
+            else:
+                kwargs = client.messages.create.call_args.kwargs
+                self.assertEqual(kwargs['system'], generation.SYSTEM)
+                self.assertEqual(kwargs['messages'][0]['content'], prompt)
 
 
 if __name__ == '__main__':
