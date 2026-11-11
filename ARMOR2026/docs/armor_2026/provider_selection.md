@@ -40,3 +40,7 @@ Errors now include a sanitized HTTP status and provider message, redacting confi
 ## Generation v4
 
 See [generation_v4.md](generation_v4.md) for neutral shared contexts, compliance questions, and option-letter validation. Start a new v4 output; older checkpoints and drafts remain intact. Resume only the same interrupted v4 run with identical inputs, script, model IDs, and settings.
+
+### V4 length-check fix
+
+Option length targets now produce review warnings, not generation failures. The immediately preceding v4 checkpoint can be upgraded with `--run --resume --upgrade-checkpoint`, preserving successful records and revalidating saved length-only failures without another request for those tasks. See [the recovery instructions](generation_v4.md#recover-the-v4-length-check-failure). This exception does not permit upgrading older v1–v3 runs or changing sources, models, or settings.

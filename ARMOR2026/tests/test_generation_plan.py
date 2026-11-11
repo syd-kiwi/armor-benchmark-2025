@@ -347,8 +347,9 @@ class SharedScenarioTests(unittest.TestCase):
             generation.parse_questions(json.dumps({'questions': items}), task)
         task, items = self.family()
         items[0]['option_A'] = 'Too short'
-        with self.assertRaisesRegex(ValueError, 'Option-length'):
-            generation.parse_questions(json.dumps({'questions': items}), task)
+        parsed = generation.parse_questions(json.dumps({'questions': items}), task)
+        report = generation.quality_summary(generation.records_for(parsed, task, {'model': 'mock'}))
+        self.assertEqual(len(report['length_warnings']), 1)
 
     def test_source_sentence_in_stem_rejected(self):
         task, items = self.family()
@@ -408,6 +409,63 @@ class V4GuardTests(unittest.TestCase):
         for phrase in ['Advisor availability is not the same', 'No shared fact contradicts', 'invariant doctrine-recall',
                        'actual legal-advisor', 'never their provisional letters']:
             self.assertIn(phrase, prompt)
+
+
+class LengthRecoveryTests(unittest.TestCase):
+    family = SharedScenarioTests.family
+
+    def test_known_v4_checkpoint_recovers_length_failure_without_api_call(self):
+        task, items = self.family()
+        for c, count in zip('ABC', [19, 15, 13]):
+            items[0][f'option_{c}'] = c + ' synthetic' * (count - 1)
+        response = {'text': json.dumps({'questions': items}), 'model': 'mock'}
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)/'draft.jsonl'
+            raw = output.with_suffix('.jsonl.raw.jsonl')
+            path = output.with_suffix('.jsonl.manifest.json')
+            saved = {'total': 50, 'seed': 2026, 'models': {'claude': 'mock'},
+                     'prompt_version': generation.PROMPT_VERSION, 'max_tokens': 8192,
+                     'tasks_sha256': generation.sha(json.dumps([task], sort_keys=True, ensure_ascii=False)),
+                     'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
+            path.write_text(json.dumps(saved))
+            generation.append(raw, {'task_id': task['task_id'], 'status': 'failed', 'error_type': 'ValueError',
+                                    'message': 'Option-length quality check failed: [19, 15, 13]', 'response': response})
+            original_raw = raw.read_bytes()
+            args = SimpleNamespace(output=output, total_questions=50, seed=2026, max_tokens=8192,
+                                   resume=True, upgrade_checkpoint=True, max_new_tasks=None)
+            with patch.object(generation, 'make_clients', return_value={'claude': Mock()}):
+                with patch.object(generation, 'call_llm') as call, contextlib.redirect_stdout(io.StringIO()):
+                    generation.execute([task], {'claude': 'mock'}, args)
+                    call.assert_not_called()
+            self.assertTrue(raw.read_bytes().startswith(original_raw))
+            self.assertEqual(len(generation.read_jsonl(output)), 3)
+            history = generation.read_jsonl(raw)
+            self.assertFalse(history[-1]['recovery']['api_call_made'])
+            generation.validate_saved_entries(history, [task])
+            report = json.loads(output.with_suffix('.jsonl.quality.json').read_text())
+            self.assertEqual(report['length_warnings'][0]['option_word_counts'], {'A': 15, 'B': 19, 'C': 13})
+            self.assertEqual(json.loads(path.with_suffix('.json.before-length-fix.json').read_text()), saved)
+
+    def test_recovery_does_not_accept_other_errors_or_bypass_evidence(self):
+        task, items = self.family()
+        entry = {'task_id': task['task_id'], 'status': 'failed', 'error_type': 'ValueError',
+                 'message': 'Wrong answer key', 'response': {'text': json.dumps({'questions': items}), 'model': 'mock'}}
+        self.assertIsNone(generation.recover_length_failure([entry], task, []))
+        entry['message'] = 'Option-length quality check failed: [19, 15, 13]'
+        items[0]['supporting_evidence'] = 'Invented evidence'
+        entry['response']['text'] = json.dumps({'questions': items})
+        with self.assertRaisesRegex(ValueError, 'Evidence'):
+            generation.recover_length_failure([entry], task, [])
+
+    def test_upgrade_cannot_change_model_or_plan(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            saved = {'prompt_version': generation.PROMPT_VERSION, 'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES)),
+                     'models': {'claude': 'old'}, 'tasks_sha256': 'old-plan'}
+            for change in [{'models': {'claude': 'new'}}, {'tasks_sha256': 'new-plan'}]:
+                current = saved | {'script_sha256': 'current'} | change
+                with self.assertRaisesRegex(ValueError, 'cannot change'):
+                    generation.upgrade_checkpoint(Path(tmp)/'manifest.json', saved, current, [], [])
+            self.assertEqual(list(Path(tmp).iterdir()), [])
 
 
 if __name__ == '__main__':
