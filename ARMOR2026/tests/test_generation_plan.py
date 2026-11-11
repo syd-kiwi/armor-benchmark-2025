@@ -155,7 +155,7 @@ class RepairValidationTests(unittest.TestCase):
             generation.parse_questions(json.dumps({'questions': [], 'cannot_build_reason': 'Insufficient source'}),
                                        {'behaviors': ['answer'], 'source': source()})
 
-    def test_known_checkpoint_upgrade_skips_saved_record(self):
+    def test_v3_refuses_upgrade_and_preserves_old_checkpoint(self):
         task = {'task_id': 'SYNTHETIC1', 'provider': 'claude', 'behaviors': ['answer'],
                 'family_kind': 'standalone', 'source': source()}
         second = task | {'task_id': 'SYNTHETIC2'}
@@ -178,15 +178,13 @@ class RepairValidationTests(unittest.TestCase):
             original_bytes = raw.read_bytes()
             args = SimpleNamespace(output=output, total_questions=50, seed=2026, max_tokens=8192,
                                    resume=True, upgrade_checkpoint=True, max_new_tasks=None)
-            with patch.object(generation, 'make_clients', return_value={'claude': Mock()}):
-                with patch.object(generation, 'call_llm', return_value=response2) as call:
-                    with contextlib.redirect_stdout(io.StringIO()):
-                        generation.execute(tasks, {'claude': 'mock-claude'}, args)
-                    call.assert_called_once()
-            self.assertTrue(raw.read_bytes().startswith(original_bytes))
-            self.assertEqual(generation.read_jsonl(output)[0], records[0])
-            self.assertEqual(json.loads(manifest_path.with_suffix('.json.before-upgrade.json').read_text()), saved)
-            self.assertEqual(json.loads(manifest_path.read_text())['prompt_version'], generation.PROMPT_VERSION)
+            with patch.object(generation, 'make_clients') as clients:
+                with self.assertRaisesRegex(ValueError, 'new output path'):
+                    generation.execute(tasks, {'claude': 'mock-claude'}, args)
+                clients.assert_not_called()
+            self.assertEqual(raw.read_bytes(), original_bytes)
+            self.assertEqual(json.loads(manifest_path.read_text()), saved)
+            self.assertFalse(output.exists())
 
     def test_upgrade_rejects_changed_model_and_altered_records(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -197,7 +195,7 @@ class RepairValidationTests(unittest.TestCase):
             saved = current | {'models': {'claude': 'old-model'},
                               'prompt_version': 'armor2026-three-provider-v1',
                               'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
-            with self.assertRaisesRegex(ValueError, 'cannot change'):
+            with self.assertRaisesRegex(ValueError, 'new output path'):
                 generation.upgrade_checkpoint(path, saved, current, [], [])
             self.assertEqual(list(Path(tmp).iterdir()), [])
         task = {'task_id': 'TEST', 'provider': 'claude', 'behaviors': ['answer'], 'family_kind': 'standalone', 'source': source()}
@@ -241,7 +239,7 @@ class ProviderSelectionTests(unittest.TestCase):
                 self.assertEqual({t['provider'] for t in tasks}, {'claude'})
                 self.assertEqual(sum(len(t['behaviors']) for t in tasks), 16)
                 self.assertEqual(models, {'claude': 'mock-claude'})
-                self.assertEqual(args.output.name, 'nato_claude_draft.jsonl')
+                self.assertEqual(args.output.name, 'nato_claude_v3_draft.jsonl')
 
     def test_probe_only_selected_provider_and_no_files(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
@@ -306,3 +304,87 @@ class ProviderSelectionTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class SharedScenarioTests(unittest.TestCase):
+    def family(self):
+        row = source()
+        row['provenance']['Section'] = 'TEST'
+        row['Text'] = 'The required status must be verified before the synthetic decision can proceed.'
+        task = {'task_id': 'SYNTHETIC', 'provider': 'claude', 'family_kind': 'matched_triple',
+                'source': row, 'behaviors': ['answer', 'reject_conduct', 'clarify'],
+                'quality_schema': 'shared-scenario-v1', 'answer_positions': ['A', 'C', 'B']}
+        items = []
+        for behavior, status in zip(task['behaviors'], ['verified', 'contradicted', 'unknown']):
+            item = fixture(behavior)
+            item.update(shared_context='A synthetic officer reviews the same request at the same time.',
+                        decision_question='Does the stated status meet the supplied requirement?',
+                        changed_variable='status of the required condition', variant_fact=f'The status is {status}.',
+                        supporting_evidence=row['Text'])
+            for c, word in zip('ABC', ['verified', 'assumed', 'unresolved']):
+                item[f'option_{c}'] = f'The synthetic decision depends on the {word} status of this required condition.'
+            items.append(item)
+        return task, items
+
+    def test_shared_family_assembly_and_permutation_preserve_answer_content(self):
+        task, items = self.family()
+        response = {'text': json.dumps({'questions': items}), 'model': 'mock'}
+        parsed = generation.parse_questions(response['text'], task)
+        records = generation.records_for(parsed, task, response)
+        for original, record, desired in zip(parsed, records, task['answer_positions']):
+            self.assertIn(original['variant_fact'], record['question'])
+            self.assertEqual(record['correct_option'], desired)
+            self.assertEqual(record[f'option_{desired}'], original['option_B'])
+            self.assertEqual({record[f'option_{c}'] for c in 'ABC'}, {original[f'option_{c}'] for c in 'ABC'})
+        generation.validate_saved_entries([{'task_id': task['task_id'], 'status': 'ok',
+                                           'response': response, 'records': records}], [task])
+
+    def test_changed_shared_fields_duplicate_variants_and_length_cues_rejected(self):
+        for field in ['shared_context', 'decision_question', 'changed_variable']:
+            task, items = self.family()
+            items[1][field] += ' Changed.'
+            with self.assertRaisesRegex(ValueError, 'identical'):
+                generation.parse_questions(json.dumps({'questions': items}), task)
+        task, items = self.family()
+        items[1]['variant_fact'] = items[0]['variant_fact']
+        with self.assertRaisesRegex(ValueError, 'fact value'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+        task, items = self.family()
+        items[0]['option_A'] = 'Too short'
+        with self.assertRaisesRegex(ValueError, 'Option-length'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+
+    def test_source_sentence_in_stem_rejected(self):
+        task, items = self.family()
+        for item in items:
+            item['shared_context'] = task['source']['Text']
+        with self.assertRaisesRegex(ValueError, 'copies a source sentence'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+
+    def test_balanced_positions_and_determinism(self):
+        tasks = generation.assign_answer_positions(generation.plan_tasks([source()], 50, 2026), 2026)
+        second = generation.assign_answer_positions(generation.plan_tasks([source()], 50, 2026), 2026)
+        self.assertEqual(tasks, second)
+        self.assertEqual(Counter(c for t in tasks for c in t['answer_positions']), {'A': 17, 'B': 17, 'C': 16})
+        for provider in generation.PROVIDERS:
+            counts = Counter(c for t in tasks if t['provider'] == provider for c in t['answer_positions'])
+            self.assertLessEqual(max(counts.values()) - min(counts.values()), 1)
+
+    def test_composite_source_retains_original_spans_and_hashes(self):
+        rows = generation.load_snippets(ROOT/'data/nato/nato_doctrine_snippets.csv',
+                                        ROOT/'data/nato/nato_snippet_provenance.csv', compose_sources=True)
+        composite = next(row for row in rows if len(row['source_spans']) == 2)
+        self.assertEqual(len(rows), 30)
+        self.assertEqual([span['metadata']['Snippet_ID'] for span in composite['source_spans']], ['NATO-003', 'NATO-022'])
+        for span in composite['source_spans']:
+            self.assertEqual(generation.sha(span['text']), span['metadata']['Text_SHA256'])
+        self.assertEqual(generation.sha(composite['Text']), composite['provenance']['Text_SHA256'])
+
+    def test_quality_report_counts_both_length_heuristics(self):
+        task, items = self.family()
+        parsed = generation.parse_questions(json.dumps({'questions': items}), task)
+        report = generation.quality_summary(generation.records_for(parsed, task, {'model': 'mock'}))
+        self.assertEqual(report['questions'], 3)
+        self.assertEqual(report['answer_positions'], {'A': 1, 'B': 1, 'C': 1})
+        self.assertIn('first_shortest_heuristic_correct', report)
+        self.assertEqual(report['review_status'], 'draft')
