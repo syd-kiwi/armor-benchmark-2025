@@ -27,9 +27,9 @@ Once the Claude probe works:
 python ARMOR2026\scripts\generate_mcqs_multi_llm.py --provider claude --model claude-sonnet-4-6 --run
 ```
 
-This generates only **16 Claude draft questions** in `ARMOR2026/results/armor_2026/runs/nato_claude_v3_draft.jsonl`. It does not call GPT or Gemini. The total plan still has 50 questions: GPT 17, Gemini 17, Claude 16. Selecting a provider chooses its share rather than reallocating all 50 to it. Source assignments and task IDs remain those of the full plan. Five matched triples plus one standalone are planned for Claude. Model and human review requirements are unchanged.
+This generates only **16 Claude draft questions** in `ARMOR2026/results/armor_2026/runs/nato_claude_v4_draft.jsonl`. It does not call GPT or Gemini. The total plan still has 50 questions: GPT 17, Gemini 17, Claude 16. Selecting a provider chooses its share rather than reallocating all 50 to it. Source assignments and task IDs remain those of the full plan. Five matched triples plus one standalone are planned for Claude. Model and human review requirements are unchanged.
 
-Default outputs are distinct: `nato_gpt_v3_draft.jsonl`, `nato_gemini_v3_draft.jsonl`, `nato_claude_v3_draft.jsonl`, and `nato_50_v3_draft.jsonl` for all providers. Use `--output_questions` to choose another new path. Do not use the path of a saved three-provider or older Gemini-only run for a provider-only run.
+Default outputs are distinct: `nato_gpt_v4_draft.jsonl`, `nato_gemini_v4_draft.jsonl`, `nato_claude_v4_draft.jsonl`, and `nato_50_v4_draft.jsonl` for all providers. Use `--output_questions` to choose another new path. Do not use the path of a saved three-provider or older Gemini-only run for a provider-only run.
 
 To stop after the first generation task, add `--max_new_tasks 1`. This saves a raw checkpoint, not the complete final file. To finish later, use the same provider/model/output with `--run --resume`, without that task limit. Successful tasks in that run are skipped. No automatic retries are made; resumed failed requests can incur charges.
 
@@ -37,6 +37,6 @@ Resume requires identical source data, task plan, effective model IDs, script ha
 
 Errors now include a sanitized HTTP status and provider message, redacting configured keys and URLs. This helps distinguish service errors such as 503 from permission, model access, or generation-validation failures. No live calls were made while preparing this update; tests use synthetic fixtures and mock clients.
 
-## Generation v3
+## Generation v4
 
-See [generation_v3.md](generation_v3.md) for shared scenarios, balanced answer positions, quality checks, and new output filenames. Older v1/v2 checkpoints cannot be upgraded into v3. Keep those files and start a new output. Resume only an interrupted v3 run with identical inputs, script, model IDs, and settings.
+See [generation_v4.md](generation_v4.md) for neutral shared contexts, compliance questions, and option-letter validation. Start a new v4 output; older checkpoints and drafts remain intact. Resume only the same interrupted v4 run with identical inputs, script, model IDs, and settings.

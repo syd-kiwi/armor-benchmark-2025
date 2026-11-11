@@ -155,7 +155,7 @@ class RepairValidationTests(unittest.TestCase):
             generation.parse_questions(json.dumps({'questions': [], 'cannot_build_reason': 'Insufficient source'}),
                                        {'behaviors': ['answer'], 'source': source()})
 
-    def test_v3_refuses_upgrade_and_preserves_old_checkpoint(self):
+    def test_v4_refuses_upgrade_and_preserves_old_checkpoint(self):
         task = {'task_id': 'SYNTHETIC1', 'provider': 'claude', 'behaviors': ['answer'],
                 'family_kind': 'standalone', 'source': source()}
         second = task | {'task_id': 'SYNTHETIC2'}
@@ -239,7 +239,7 @@ class ProviderSelectionTests(unittest.TestCase):
                 self.assertEqual({t['provider'] for t in tasks}, {'claude'})
                 self.assertEqual(sum(len(t['behaviors']) for t in tasks), 16)
                 self.assertEqual(models, {'claude': 'mock-claude'})
-                self.assertEqual(args.output.name, 'nato_claude_v3_draft.jsonl')
+                self.assertEqual(args.output.name, 'nato_claude_v4_draft.jsonl')
 
     def test_probe_only_selected_provider_and_no_files(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
@@ -300,10 +300,6 @@ class ProviderSelectionTests(unittest.TestCase):
                     call.assert_called_once()
             self.assertEqual(len(generation.read_jsonl(args.output)), 2)
             self.assertEqual(gpt.read_text(), 'UNCHANGED')
-
-
-if __name__ == '__main__':
-    unittest.main()
 
 
 class SharedScenarioTests(unittest.TestCase):
@@ -388,3 +384,31 @@ class SharedScenarioTests(unittest.TestCase):
         self.assertEqual(report['answer_positions'], {'A': 1, 'B': 1, 'C': 1})
         self.assertIn('first_shortest_heuristic_correct', report)
         self.assertEqual(report['review_status'], 'draft')
+
+
+class V4GuardTests(unittest.TestCase):
+    family = SharedScenarioTests.family
+    def test_position_references_rejected_before_shuffle(self):
+        for text in ['Option B is incorrect.', 'Choices A and C are incorrect.', 'The answer is supported by the source. Answer C is wrong.']:
+            task, items = self.family()
+            items[0]['reference_answer'] = text
+            with self.assertRaisesRegex(ValueError, 'Option-letter reference'):
+                generation.parse_questions(json.dumps({'questions': items}), task)
+
+    def test_invariant_question_rejected(self):
+        task, items = self.family()
+        for item in items:
+            item['decision_question'] = 'What obligation does the commander retain after the assessment?'
+        with self.assertRaisesRegex(ValueError, 'invariant doctrine recall'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+
+    def test_prompt_contains_neutral_context_and_counterfactual_instructions(self):
+        task, _ = self.family()
+        prompt = generation.build_prompt(task)
+        for phrase in ['Advisor availability is not the same', 'No shared fact contradicts', 'invariant doctrine-recall',
+                       'actual legal-advisor', 'never their provisional letters']:
+            self.assertIn(phrase, prompt)
+
+
+if __name__ == '__main__':
+    unittest.main()
