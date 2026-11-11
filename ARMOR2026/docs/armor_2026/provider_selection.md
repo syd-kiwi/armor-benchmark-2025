@@ -36,3 +36,22 @@ To stop after the first generation task, add `--max_new_tasks 1`. This saves a r
 Resume requires identical source data, task plan, effective model IDs, script hash, and token settings. Previous-version checkpoints remain intact, but their script hashes/formats are not migrated by this update. Start a new provider-only output for further work without repeating other providers. Existing successful GPT records in older raw files are not automatically merged or replaced; retain those files for later reconciliation. Do not edit manifests to bypass the guard or run concurrent processes against the same output.
 
 Errors now include a sanitized HTTP status and provider message, redacting configured keys and URLs. This helps distinguish service errors such as 503 from permission, model access, or generation-validation failures. No live calls were made while preparing this update; tests use synthetic fixtures and mock clients.
+
+## Resume after the variant-validation fix
+
+Prompt v2 clarifies that broad governing-policy language does not establish a direct approval requirement for every subordinate ROE constraint. It still allows the generator to report that a source cannot support a requested triple. That report is a visible failure requiring source/design review, not permission to invent a prohibition. Structural validation and an exact quotation do not establish that a reference answer follows from doctrine.
+
+The parser now sorts items by their explicit behavior labels instead of assuming the array arrived in the requested order. It does not change labels, option text, or correct answers. Clarification items may have empty `decisive_facts` if `missing_facts` names essential unknowns. Supported-answer and rejection items still require decisive facts; other evidence and schema checks remain.
+
+For an interrupted run from the immediately preceding unified script (commit `c570a0d`), use:
+
+```powershell
+git pull --ff-only origin armor-2026
+python ARMOR2026\scripts\generate_mcqs_multi_llm.py --provider claude --model claude-sonnet-4-6 --run --resume --upgrade-checkpoint
+```
+
+This explicitly upgrades only a recognized preceding script hash (Git LF or Windows CRLF). The source data, task plan, selected provider, model IDs, and token settings must still match. Saved successful records are checked against their raw responses and source metadata before updating the manifest. A `.before-upgrade.json` manifest backup is kept. Existing raw checkpoint lines and saved question records remain unchanged; completed tasks are not requested again.
+
+The old completed records retain prompt v1 metadata, and newly generated records use v2. Report this mixture when analyzing generation provenance. A failed raw response is not automatically accepted merely because the revised parser could read it. The failed task is requested again under v2, which can incur API charges. All questions, including earlier saved drafts, still need substantive review.
+
+If the script version is unrecognized, the source bindings differ, or saved records do not match their raw responses, upgrading stops before any API request. Do not edit manifests or delete saved questions to bypass that check. Keep the files for diagnosis. For later resumes of a successfully upgraded run, `--resume` alone is sufficient.

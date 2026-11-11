@@ -133,6 +133,81 @@ class ValidationTests(unittest.TestCase):
             generation.parse_questions(json.dumps({'questions': [bad]}), self.task('clarify'))
 
 
+class RepairValidationTests(unittest.TestCase):
+    def test_reorders_explicit_behaviors_without_changing_keys(self):
+        task = {'behaviors': ['answer', 'reject_conduct', 'clarify'], 'source': source()}
+        answer = fixture('answer') | {'question': 'Synthetic supported case?', 'correct_option': 'A'}
+        reject = fixture('reject_conduct') | {'question': 'Synthetic prohibited case?', 'correct_option': 'B'}
+        clarify = fixture('clarify') | {'question': 'Synthetic incomplete case?', 'correct_option': 'C', 'decisive_facts': []}
+        result = generation.parse_questions(json.dumps({'questions': [reject, answer, clarify]}), task)
+        self.assertEqual([q['expected_behavior'] for q in result], task['behaviors'])
+        self.assertEqual([q['correct_option'] for q in result], ['A', 'B', 'C'])
+        self.assertEqual(result[2]['decisive_facts'], [])
+        self.assertEqual(result[2]['missing_facts'], clarify['missing_facts'])
+
+    def test_duplicate_labels_not_silently_relabelled(self):
+        task = {'behaviors': ['answer', 'reject_conduct', 'clarify'], 'source': source()}
+        with self.assertRaisesRegex(ValueError, 'Expected behavior labels'):
+            generation.parse_questions(json.dumps({'questions': [fixture(), fixture(), fixture('clarify')]}), task)
+
+    def test_cannot_build_reason_is_exposed(self):
+        with self.assertRaisesRegex(ValueError, 'Insufficient source'):
+            generation.parse_questions(json.dumps({'questions': [], 'cannot_build_reason': 'Insufficient source'}),
+                                       {'behaviors': ['answer'], 'source': source()})
+
+    def test_known_checkpoint_upgrade_skips_saved_record(self):
+        task = {'task_id': 'SYNTHETIC1', 'provider': 'claude', 'behaviors': ['answer'],
+                'family_kind': 'standalone', 'source': source()}
+        second = task | {'task_id': 'SYNTHETIC2'}
+        item = fixture()
+        response = {'text': json.dumps({'questions': [item]}), 'model': 'mock-claude'}
+        response2 = {'text': json.dumps({'questions': [item | {'question': 'Second synthetic fixture?'}]}), 'model': 'mock-claude'}
+        records = generation.records_for([item], task, response)
+        records[0]['prompt_version'] = 'armor2026-three-provider-v1'
+        tasks = [task, second]
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)/'claude.jsonl'
+            raw = output.with_suffix('.jsonl.raw.jsonl')
+            manifest_path = output.with_suffix('.jsonl.manifest.json')
+            saved = {'total': 50, 'seed': 2026, 'models': {'claude': 'mock-claude'},
+                     'prompt_version': 'armor2026-three-provider-v1', 'max_tokens': 8192,
+                     'tasks_sha256': generation.sha(json.dumps(tasks, sort_keys=True, ensure_ascii=False)),
+                     'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
+            manifest_path.write_text(json.dumps(saved))
+            generation.append(raw, {'task_id': task['task_id'], 'status': 'ok', 'response': response, 'records': records})
+            original_bytes = raw.read_bytes()
+            args = SimpleNamespace(output=output, total_questions=50, seed=2026, max_tokens=8192,
+                                   resume=True, upgrade_checkpoint=True, max_new_tasks=None)
+            with patch.object(generation, 'make_clients', return_value={'claude': Mock()}):
+                with patch.object(generation, 'call_llm', return_value=response2) as call:
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.execute(tasks, {'claude': 'mock-claude'}, args)
+                    call.assert_called_once()
+            self.assertTrue(raw.read_bytes().startswith(original_bytes))
+            self.assertEqual(generation.read_jsonl(output)[0], records[0])
+            self.assertEqual(json.loads(manifest_path.with_suffix('.json.before-upgrade.json').read_text()), saved)
+            self.assertEqual(json.loads(manifest_path.read_text())['prompt_version'], generation.PROMPT_VERSION)
+
+    def test_upgrade_rejects_changed_model_and_altered_records(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'manifest.json'
+            current = {'total': 50, 'seed': 2026, 'models': {'claude': 'new-model'},
+                       'prompt_version': generation.PROMPT_VERSION, 'max_tokens': 8192,
+                       'tasks_sha256': 'test', 'script_sha256': 'current'}
+            saved = current | {'models': {'claude': 'old-model'},
+                              'prompt_version': 'armor2026-three-provider-v1',
+                              'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
+            with self.assertRaisesRegex(ValueError, 'cannot change'):
+                generation.upgrade_checkpoint(path, saved, current, [], [])
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+        task = {'task_id': 'TEST', 'provider': 'claude', 'behaviors': ['answer'], 'family_kind': 'standalone', 'source': source()}
+        response = {'text': json.dumps({'questions': [fixture()]}), 'model': 'mock'}
+        records = generation.records_for([fixture()], task, response)
+        records[0]['correct_option'] = 'C'
+        with self.assertRaisesRegex(ValueError, 'differs'):
+            generation.validate_saved_entries([{'task_id': 'TEST', 'status': 'ok', 'response': response, 'records': records}], [task])
+
+
 class AdapterTests(unittest.TestCase):
     def test_provider_calls_with_mock_clients_only(self):
         gpt = Mock()
