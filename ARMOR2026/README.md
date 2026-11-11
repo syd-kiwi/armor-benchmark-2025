@@ -1,5 +1,7 @@
 # ARMOR 2026 development
 
+For the current 519-candidate expansion plan, see [expand_to_1038.md](docs/armor_2026/expand_to_1038.md). It uses the single MCQ script for generation and optional cross-review; the historical pipeline below is separate.
+
 All 2026 work is consolidated here: `armor2026/` contains the earlier paired-format pipeline, `scripts/` contains the three-provider MCQ generator, `data/nato/` contains 30 source snippets and provenance, `input_policy_documents/` contains the NATO PDF, and `paper/` contains the current LaTeX draft copied from the paper repository.
 
 ## One generation script for all providers

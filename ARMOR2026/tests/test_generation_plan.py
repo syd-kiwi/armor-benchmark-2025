@@ -239,7 +239,7 @@ class ProviderSelectionTests(unittest.TestCase):
                 self.assertEqual({t['provider'] for t in tasks}, {'claude'})
                 self.assertEqual(sum(len(t['behaviors']) for t in tasks), 16)
                 self.assertEqual(models, {'claude': 'mock-claude'})
-                self.assertEqual(args.output.name, 'nato_claude_v5_draft.jsonl')
+                self.assertEqual(args.output.name, 'nato_50_claude_v6_draft.jsonl')
 
     def test_probe_only_selected_provider_and_no_files(self):
         with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'ANTHROPIC_API_KEY': 'fake'}, clear=True):
@@ -477,7 +477,7 @@ class V5PromptTests(unittest.TestCase):
         saved = {'prompt_version': 'armor2026-three-provider-v4',
                  'script_sha256': next(iter(generation.PREVIOUS_SCRIPT_HASHES))}
         with tempfile.TemporaryDirectory() as tmp:
-            with self.assertRaisesRegex(ValueError, 'Prompt v5 requires a new output path'):
+            with self.assertRaisesRegex(ValueError, 'Prompt v6 requires a new output path'):
                 generation.upgrade_checkpoint(Path(tmp)/'manifest.json', saved, saved, [], [])
             self.assertEqual(list(Path(tmp).iterdir()), [])
 
@@ -508,6 +508,120 @@ class V5PromptTests(unittest.TestCase):
                 kwargs = client.messages.create.call_args.kwargs
                 self.assertEqual(kwargs['system'], generation.SYSTEM)
                 self.assertEqual(kwargs['messages'][0]['content'], prompt)
+
+
+class ExpansionTests(unittest.TestCase):
+    family = SharedScenarioTests.family
+
+    def test_519_plan_quotas_and_ids(self):
+        tasks = generation.assign_answer_positions(generation.plan_tasks([source()], 519, 2026), 2026)
+        self.assertEqual(Counter(t['provider'] for t in tasks), {'gpt': 59, 'gemini': 59, 'claude': 59})
+        self.assertEqual(Counter(b for t in tasks for b in t['behaviors']), dict.fromkeys(generation.BEHAVIORS, 173))
+        for provider in generation.PROVIDERS:
+            self.assertEqual(sum(len(t['behaviors']) for t in tasks if t['provider'] == provider), 173)
+        self.assertEqual(sum(t['family_kind'] == 'matched_triple' for t in tasks), 171)
+        self.assertEqual(sum(t['family_kind'] == 'standalone' for t in tasks), 6)
+        self.assertTrue(all(t['task_id'].startswith('NATO519-') for t in tasks))
+        self.assertTrue(generation.plan_tasks([source()], 3, 1, 'replacement1')[0]['task_id'].startswith('replacement1-'))
+
+    def test_v6_frame_cannot_contain_status_claims(self):
+        task, items = self.family()
+        task['quality_schema'] = 'shared-scenario-v2'
+        with self.assertRaisesRegex(ValueError, 'fixed neutral frame'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+        for item in items:
+            item['shared_context'] = generation.NEUTRAL_CONTEXT
+        parsed = generation.parse_questions(json.dumps({'questions': items}), task)
+        self.assertEqual(len(parsed), 3)
+
+    def test_ordinal_references_rejected(self):
+        task, items = self.family()
+        items[0]['reference_answer'] = 'The second incorrect option assumes missing facts.'
+        with self.assertRaisesRegex(ValueError, 'Ordinal option reference'):
+            generation.parse_questions(json.dumps({'questions': items}), task)
+
+
+class CrossReviewTests(unittest.TestCase):
+    family = SharedScenarioTests.family
+
+    def candidates(self):
+        task, items = self.family()
+        parsed = generation.parse_questions(json.dumps({'questions': items}), task)
+        records = generation.records_for(parsed, task, {'model': 'mock'})
+        for record in records:
+            record['source_metadata']['Text_SHA256'] = generation.sha(record['source_passage'])
+        return records
+
+    def response(self, records):
+        return {'text': json.dumps({'family_verdict': 'pass', 'issues': [], 'items': [
+            {'qid': r['qid'], 'correct_option': r['correct_option'], 'expected_behavior': r['expected_behavior'],
+             'source_supported': True, 'explanation_supported': True, 'issues': []} for r in records]}), 'model': 'mock'}
+
+    def test_pass_and_disagreement_cannot_auto_approve(self):
+        records = self.candidates()
+        response = self.response(records)
+        self.assertEqual(generation.parse_review(response['text'], records)['effective_verdict'], 'pass')
+        data = json.loads(response['text'])
+        data['items'][0]['correct_option'] = None
+        self.assertEqual(generation.parse_review(json.dumps(data), records)['effective_verdict'], 'rework')
+        data['items'][0]['correct_option'] = records[0]['correct_option']
+        data['items'][1]['explanation_supported'] = False
+        self.assertEqual(generation.parse_review(json.dumps(data), records)['effective_verdict'], 'rework')
+        data['items'].pop()
+        with self.assertRaisesRegex(ValueError, 'each qid'):
+            generation.parse_review(json.dumps(data), records)
+
+    def test_input_rejects_incomplete_family_or_bad_source(self):
+        records = self.candidates()
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'questions.jsonl'
+            path.write_text('\n'.join(json.dumps(r) for r in records[:2]))
+            with self.assertRaisesRegex(ValueError, 'incomplete'):
+                generation.load_review_families(path)
+            records[0]['source_passage'] += ' Altered.'
+            path.write_text('\n'.join(json.dumps(r) for r in records))
+            with self.assertRaisesRegex(ValueError, 'hash mismatch'):
+                generation.load_review_families(path)
+
+    def test_review_resume_skips_success_and_preserves_input(self):
+        records = self.candidates()
+        response = self.response(records)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'questions.jsonl'
+            path.write_text('\n'.join(json.dumps(r) for r in records))
+            original = path.read_bytes()
+            families = generation.load_review_families(path)
+            args = SimpleNamespace(review_input=path, review_output=None, max_tokens=8192,
+                                   resume=False, max_new_tasks=1)
+            models = dict.fromkeys(generation.PROVIDERS, 'mock')
+            with patch.object(generation, 'make_clients', return_value={p: Mock() for p in generation.PROVIDERS}):
+                with patch.object(generation, 'call_llm', return_value=response) as call, contextlib.redirect_stdout(io.StringIO()):
+                    generation.execute_reviews(families, models, args)
+                    call.assert_called_once()
+                    self.assertEqual(call.call_args.args[1], 'gpt')  # Claude generated these records.
+                    self.assertEqual(call.call_args.kwargs['system'], generation.REVIEW_SYSTEM)
+            args.resume = True; args.max_new_tasks = None
+            with patch.object(generation, 'make_clients', return_value={p: Mock() for p in generation.PROVIDERS}):
+                with patch.object(generation, 'call_llm', return_value=response) as call, contextlib.redirect_stdout(io.StringIO()):
+                    generation.execute_reviews(families, models, args)
+                    call.assert_called_once()
+                    self.assertEqual(call.call_args.args[1], 'gemini')
+            self.assertEqual(path.read_bytes(), original)
+            summary = json.loads(Path(str(path)+'.reviews.jsonl.summary.json').read_text())
+            self.assertFalse(summary['human_approval'])
+            self.assertEqual(summary['status_counts'], {'ready_for_human_review': 1})
+
+    def test_review_preview_never_creates_clients_or_outputs(self):
+        records = self.candidates()
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'questions.jsonl'
+            path.write_text('\n'.join(json.dumps(r) for r in records))
+            with patch.object(generation, 'make_clients') as clients:
+                with patch('sys.argv', ['generator', '--review-input', str(path), '--env_file', str(Path(tmp)/'absent')]):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        generation.main()
+                clients.assert_not_called()
+            self.assertEqual(list(Path(tmp).iterdir()), [path])
 
 
 if __name__ == '__main__':
